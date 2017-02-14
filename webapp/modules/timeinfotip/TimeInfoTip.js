@@ -9,8 +9,8 @@ function formatTime(time) {
 }
 
 function formatStartTime(time) {
-  var positive = time > 0;
-  var label = Str.formatTime(Math.abs(time.toFixed(2)));
+  const positive = time > 0;
+  const label = Str.formatTime(Math.abs(time.toFixed(2)));
   if (!time) {
     return label;
   }
@@ -120,7 +120,7 @@ const defaultTimeInfoTipEventRowData = [
     type: "onLoad",
     label: Strings.WindowLoad,
     classes: "netWindowLoadBar",
-  }
+  },
 ];
 
 export default React.createClass({

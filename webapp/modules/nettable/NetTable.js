@@ -21,14 +21,14 @@ class NetModel {
       return;
     }
 
-    var pageStart = Date_.parseISO8601(page.startedDateTime);
+    const pageStart = Date_.parseISO8601(page.startedDateTime);
 
     // Iterate all timings in this phase and generate offsets (px position in the timeline).
-    for (var i = 0; i < phase.pageTimings.length; i++) {
-      var time = phase.pageTimings[i].time;
+    for (let i = 0; i < phase.pageTimings.length; i++) {
+      const time = phase.pageTimings[i].time;
       if (time > 0) {
-        var timeOffset = pageStart + time - phase.startTime;
-        var barOffset = ((timeOffset / phaseElapsed) * 100).toFixed(3);
+        const timeOffset = pageStart + time - phase.startTime;
+        const barOffset = ((timeOffset / phaseElapsed) * 100).toFixed(3);
         phase.pageTimings[i].offset = barOffset;
       }
     }
@@ -53,14 +53,14 @@ class NetModel {
     // HTTP-ON-MODIFY-REQUEST -> HTTP-ON-EXAMINE-CACHED-RESPONSE
 
     // Compute end of each phase since the request start.
-    var blocking = ((file.timings.blocked < 0) ? 0 : file.timings.blocked);
-    var resolving = blocking + ((file.timings.dns < 0) ? 0 : file.timings.dns);
-    var connecting = resolving + ((file.timings.connect < 0) ? 0 : file.timings.connect);
-    var sending = connecting + ((file.timings.send < 0) ? 0 : file.timings.send);
-    var waiting = sending + ((file.timings.wait < 0) ? 0 : file.timings.wait);
-    var receiving = waiting + ((file.timings.receive < 0) ? 0 : file.timings.receive);
+    const blocking = ((file.timings.blocked < 0) ? 0 : file.timings.blocked);
+    const resolving = blocking + ((file.timings.dns < 0) ? 0 : file.timings.dns);
+    const connecting = resolving + ((file.timings.connect < 0) ? 0 : file.timings.connect);
+    const sending = connecting + ((file.timings.send < 0) ? 0 : file.timings.send);
+    const waiting = sending + ((file.timings.wait < 0) ? 0 : file.timings.wait);
+    const receiving = waiting + ((file.timings.receive < 0) ? 0 : file.timings.receive);
 
-    var startedDateTime = Date_.parseISO8601(file.startedDateTime);
+    const startedDateTime = Date_.parseISO8601(file.startedDateTime);
 
     return {
       barOffset: (((startedDateTime - phaseStartTime) / phaseElapsed) * 100).toFixed(3),
@@ -81,7 +81,7 @@ class NetModel {
 function getElapsedTime(file) {
   // Total request time doesn't include the time spent in queue.
   // var elapsed = file.time - file.timings.blocked;
-  var time = Math.round(file.time * 10) / 10;
+  const time = Math.round(file.time * 10) / 10;
   return Str.formatTime(time.toFixed(2));
 }
 
@@ -92,12 +92,12 @@ function createBars(entry, fileTimes) {
     "Connecting",
     "Sending",
     "Waiting",
-    "Receiving"
+    "Receiving",
   ].map((barName) => ({
     className: "net" + barName + "Bar",
     style: {
       left: fileTimes.barOffset + "%",
-      width: fileTimes["bar" + barName + "Width"] + "%"
+      width: fileTimes["bar" + barName + "Width"] + "%",
     },
   }));
   bars[bars.length - 1].timeLabel = getElapsedTime(entry);
@@ -127,7 +127,7 @@ const NetTable = React.createClass({
   getInitialState() {
     const entries = this.getEntries();
     return {
-      netRowExpandedState: entries.map((page, i) => false)
+      netRowExpandedState: entries.map((page, i) => false),
     };
   },
 
@@ -173,7 +173,7 @@ const NetTable = React.createClass({
 
   onNetRowClick(netRowIdx) {
     setState(this, {
-      netRowExpandedState: this.state.netRowExpandedState.map(booleanFlipper(netRowIdx))
+      netRowExpandedState: this.state.netRowExpandedState.map(booleanFlipper(netRowIdx)),
     });
   },
 
@@ -199,10 +199,15 @@ const NetTable = React.createClass({
     return [].concat(entries.map((entry, i) => {
       const opened = netRowExpandedState[i];
       const bars = createBars(entry, m.calculateFileTimes(entry, phaseStartTime, phaseElapsed));
-      const netRow = <NetRow key={"NetRow" + i} page={page} phase={phase} entry={entry} entryId={i} opened={opened} bars={bars} pageTimingBars={pageTimingBars} onClick={this.onNetRowClick.bind(this, i)} />;
+
+      const netRow = <NetRow key={"NetRow" + i} page={page} phase={phase}
+        entry={entry} entryId={i} opened={opened} bars={bars}
+        pageTimingBars={pageTimingBars} onClick={this.onNetRowClick.bind(this, i)} />;
+
       if (!opened) {
         return netRow;
       }
+
       return [netRow, <NetInfoRow key={"NetInfoRow" + i} entry={entry} />];
     }));
   },
@@ -229,7 +234,7 @@ const NetTable = React.createClass({
         </tbody>
       </table>
     );
-  }
+  },
 });
 
 NetTable.contextTypes = {
