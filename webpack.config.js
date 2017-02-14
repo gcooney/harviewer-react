@@ -34,6 +34,7 @@ module.exports = {
   output: {
     filename: "./webapp/[name].entry.js",
   },
+  devtool: "source-map",
   plugins: [
     definePlugin,
   ],
