@@ -152,7 +152,7 @@ const NetTable = React.createClass({
         const entryId = Number(row.getAttribute("data-entry-id") || "0");
         return {
           multiline: true,
-          element: <TimeInfoTip entry={this.getEntries()[entryId]} />,
+          element: <TimeInfoTip entry={this.getEntries()[entryId]} page={page} />,
         };
       } else if (Css.hasClass(target, "netSizeLabel")) {
         return {
