@@ -44,56 +44,36 @@ const InfoTipHolder = React.createClass({
   },
 
   showInfoTip(infoTip, target, x, y, rangeParent, rangeOffset) {
-    var scrollParent = Lib.getOverflowParent(target);
-    var scrollX = x + (scrollParent ? scrollParent.scrollLeft : 0);
+    const scrollParent = Lib.getOverflowParent(target);
+    const scrollX = x + (scrollParent ? scrollParent.scrollLeft : 0);
 
     // Distribute event to all registered listeners and show the info tip if
     // any of them return true.
-    var result = Lib.dispatch2(this.listeners, "showInfoTip",
-      [infoTip, target, scrollX, y, rangeParent, rangeOffset]);
+    const dispatchArgs = [infoTip, target, scrollX, y, rangeParent, rangeOffset];
+    const result = Lib.dispatch2(this.listeners, "showInfoTip", dispatchArgs);
 
     if (result && result.element) {
       unmountComponentAtNode(infoTip);
       render(result.element, infoTip);
 
-      var htmlElt = infoTip.ownerDocument.documentElement;
-      var panelWidth = htmlElt.clientWidth;
-      var panelHeight = htmlElt.clientHeight;
-
-      const style = {};
-
-      if (x + infoTip.offsetWidth + this.infoTipMargin >
-        panelWidth - this.infoTipWindowPadding) {
-        style.left = "auto";
-        style.right = ((panelWidth - x) + this.infoTipMargin) + "px";
-      } else {
-        style.left = (x + this.infoTipMargin) + "px";
-        style.right = "auto";
-      }
-
-      if (y + infoTip.offsetHeight + this.infoTipMargin > panelHeight) {
-        style.top = Math.max(0,
-          panelHeight - (infoTip.offsetHeight + this.infoTipMargin)) + "px";
-        style.bottom = "auto";
-      } else {
-        style.top = (y + this.infoTipMargin) + "px";
-        style.bottom = "auto";
-      }
-
-      infoTip.style.top = style.top;
-      infoTip.style.left = style.left;
-      infoTip.style.right = style.right;
-      infoTip.style.bottom = style.bottom;
-
       this.setInfoTipState({
         active: true,
+        x,
+        y,
         multiline: result.multiline,
       });
     } else {
       this.setInfoTipState({
         active: false,
+        x,
+        y,
       });
     }
+  },
+
+  onInfoTipRef(ref) {
+    console.log("onInfoTipRef", ref);
+    this.infoTipDom = ref;
   },
 
   addListener(listener) {
@@ -105,8 +85,8 @@ const InfoTipHolder = React.createClass({
   },
 
   mousemove(e) {
-    var x = e.clientX;
-    var y = e.clientY;
+    const x = e.clientX;
+    const y = e.clientY;
     this.showInfoTip(this.infoTipDom, e.target, x, y, e.rangeParent, e.rangeOffset);
   },
 
@@ -119,10 +99,11 @@ const InfoTipHolder = React.createClass({
   },
 
   render() {
+    const { infoTipMargin, infoTipWindowPadding } = this;
     return (
       <div ref={(ref) => this.holder = ref}>
         {this.props.children}
-        <InfoTip ref={(ref) => this.infoTip = ref} onRef={(ref) => this.infoTipDom = ref} />
+        <InfoTip ref={(ref) => this.infoTip = ref} onRef={this.onInfoTipRef} infoTipMargin={infoTipMargin} infoTipWindowPadding={infoTipWindowPadding} />
       </div>
     );
   },

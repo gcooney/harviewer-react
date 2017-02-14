@@ -56,7 +56,7 @@ const TimeInfoTipEventRow = (props) => {
 TimeInfoTipEventRow.propTypes = {
   classes: React.PropTypes.string,
   label: React.PropTypes.string,
-  start: React.PropTypes.string,
+  start: React.PropTypes.number,
 };
 
 function makeTimeInfoTipRows(timeInfoTipRowData, entry) {
