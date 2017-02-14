@@ -178,6 +178,10 @@ const NetTable = React.createClass({
   },
 
   createNetRows(entries) {
+    if (entries.length < 1) {
+      return [];
+    }
+
     const { model, page } = this.props;
     const { netRowExpandedState } = this.state;
 
