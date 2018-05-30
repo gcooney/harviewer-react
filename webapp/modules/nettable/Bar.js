@@ -1,10 +1,12 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 
-const Bar = React.createClass({
+const Bar = createReactClass({
   displayName: "nettable/Bar",
 
   propTypes: {
-    bar: React.PropTypes.object
+    bar: PropTypes.object,
   },
 
   render() {

@@ -1,14 +1,16 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 import Tab from "./Tab";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "tabview/TabBar",
 
   propTypes: {
-    id: React.PropTypes.string,
-    onSelectTab: React.PropTypes.func,
-    selectedTabIdx: React.PropTypes.number,
-    tabs: React.PropTypes.array
+    id: PropTypes.string,
+    onSelectTab: PropTypes.func,
+    selectedTabIdx: PropTypes.number,
+    tabs: PropTypes.array,
   },
 
   onSelectTab(tab, tabIdx) {

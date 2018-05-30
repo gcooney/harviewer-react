@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import * as Str from "core/string";
 
 function getPageTitle(page) {
@@ -15,9 +16,9 @@ const PageRow = (props) => {
 };
 
 PageRow.propTypes = {
-  onClick: React.PropTypes.func,
-  opened: React.PropTypes.bool,
-  page: React.PropTypes.object,
+  onClick: PropTypes.func,
+  opened: PropTypes.bool,
+  page: PropTypes.object,
 };
 
 export default PageRow;

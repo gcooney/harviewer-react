@@ -1,15 +1,17 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 import Strings from "amdi18n!nls/requestList";
 import * as Str from "core/string";
 import { calculateSummaryInfo } from "./NetSummaryRowModel";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "nettable/NetSummaryRow",
 
   propTypes: {
-    entries: React.PropTypes.array.isRequired,
-    page: React.PropTypes.object,
-    summaryInfo: React.PropTypes.object,
+    entries: PropTypes.array.isRequired,
+    page: PropTypes.object,
+    summaryInfo: PropTypes.object,
   },
 
   formatRequestCount(count) {

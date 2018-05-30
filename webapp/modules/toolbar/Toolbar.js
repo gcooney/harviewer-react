@@ -1,6 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 
-export const Button = props => {
+export const Button = (props) => {
   return (
     <span
       ref={props.buttonRef}
@@ -14,17 +16,17 @@ export const Button = props => {
 };
 
 Button.propTypes = {
-  buttonRef: React.PropTypes.string,
-  children: React.PropTypes.node,
-  command: React.PropTypes.func,
-  title: React.PropTypes.string
+  buttonRef: PropTypes.string,
+  children: PropTypes.node,
+  command: PropTypes.func,
+  title: PropTypes.string,
 };
 
-export default React.createClass({
+export default createReactClass({
   displayName: "",
 
   propTypes: {
-    children: React.PropTypes.array
+    children: PropTypes.array,
   },
 
   createToolbarButton(title, text) {

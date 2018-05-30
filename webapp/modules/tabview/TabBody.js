@@ -1,12 +1,14 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "tabview/TabBody",
 
   propTypes: {
-    children: React.PropTypes.node,
-    id: React.PropTypes.string,
-    selected: React.PropTypes.bool
+    children: PropTypes.node,
+    id: PropTypes.string,
+    selected: PropTypes.bool,
   },
 
   render() {
@@ -16,5 +18,5 @@ export default React.createClass({
         {this.props.children}
       </div>
     );
-  }
+  },
 });

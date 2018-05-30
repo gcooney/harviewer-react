@@ -1,4 +1,5 @@
 import React from "react";
+import createReactClass from "create-react-class";
 
 import HarModel from "preview/harModel";
 import Loader from "preview/harModelLoader";
@@ -16,7 +17,7 @@ import AboutTab from "./tabs/AboutTab";
 import HomeTab from "./tabs/HomeTab";
 import PreviewTab from "./tabs/PreviewTab";
 
-export default React.createClass({
+export default createReactClass({
   createAboutTab(harViewerExampleApp) {
     const versionStr = buildInfo.version + "/" + buildInfo.gitVersion;
     const aboutTab = {
@@ -81,7 +82,7 @@ export default React.createClass({
   componentDidMount() {
     this.updatePreviewCols();
 
-    Loader.run(response => {
+    Loader.run((response) => {
       const model = new HarModel();
       const har = (typeof response === "string") ? JSON.parse(response) : response;
       model.append(har);
@@ -89,7 +90,7 @@ export default React.createClass({
         model,
         selectedTabIdx: 1
       });
-    }, err => console.error(err));
+    }, (err) => console.error(err));
   },
 
   componentWillUnmount() {

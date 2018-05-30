@@ -1,15 +1,17 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "tabview/Tab",
 
   propTypes: {
-    content: React.PropTypes.node,
-    id: React.PropTypes.string,
-    label: React.PropTypes.string,
-    onSelect: React.PropTypes.func,
-    selected: React.PropTypes.bool,
-    title: React.PropTypes.string
+    content: PropTypes.node,
+    id: PropTypes.string,
+    label: PropTypes.string,
+    onSelect: PropTypes.func,
+    selected: PropTypes.bool,
+    title: PropTypes.string,
   },
 
   updateSelected() {
@@ -33,5 +35,5 @@ export default React.createClass({
         {content || label || id}
       </a>
     );
-  }
+  },
 });

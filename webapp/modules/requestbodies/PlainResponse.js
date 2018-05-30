@@ -1,11 +1,13 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 import * as Str from "core/string";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "requestbodies/PlainResponse",
 
   propTypes: {
-    entry: React.PropTypes.object
+    entry: PropTypes.object,
   },
 
   render() {

@@ -1,14 +1,16 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 import Toolbar, { Button } from "../toolbar/Toolbar";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "tabs/PreviewTabToolbar",
 
   propTypes: {
-    onStatsClick: React.PropTypes.func,
-    onTimelineClick: React.PropTypes.func,
-    onClearClick: React.PropTypes.func,
-    onDownloadClick: React.PropTypes.func
+    onStatsClick: PropTypes.func,
+    onTimelineClick: PropTypes.func,
+    onClearClick: PropTypes.func,
+    onDownloadClick: PropTypes.func,
   },
 
   render() {

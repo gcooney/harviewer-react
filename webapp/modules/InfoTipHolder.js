@@ -1,15 +1,17 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 import { render, unmountComponentAtNode } from "react-dom";
 
 import * as Lib from "core/lib";
 
 import InfoTip from "./InfoTip";
 
-const InfoTipHolder = React.createClass({
+const InfoTipHolder = createReactClass({
   displayName: "",
 
   propTypes: {
-    children: React.PropTypes.node,
+    children: PropTypes.node,
   },
 
   listeners: [],
@@ -110,7 +112,7 @@ const InfoTipHolder = React.createClass({
 });
 
 InfoTipHolder.childContextTypes = {
-  infoTipHolder: React.PropTypes.object,
+  infoTipHolder: PropTypes.object,
 };
 
 export default InfoTipHolder;

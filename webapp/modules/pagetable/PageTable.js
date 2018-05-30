@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 
 import setState from "../setState";
 import booleanFlipper from "../booleanFlipper";
@@ -6,11 +8,11 @@ import booleanFlipper from "../booleanFlipper";
 import PageRow from "./PageRow";
 import PageInfoRow from "./PageInfoRow";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "pagetable/PageTable",
 
   propTypes: {
-    model: React.PropTypes.object,
+    model: PropTypes.object,
   },
 
   getInitialState() {

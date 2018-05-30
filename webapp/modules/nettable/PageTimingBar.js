@@ -1,11 +1,13 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "nettable/PageTimingBar",
 
   propTypes: {
-    classes: React.PropTypes.string,
-    left: React.PropTypes.string
+    classes: PropTypes.string,
+    left: PropTypes.string,
   },
 
   render() {

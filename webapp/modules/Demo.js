@@ -1,4 +1,5 @@
 import React from "react";
+import createReactClass from "create-react-class";
 import Link from "valuelink";
 import { Input } from "valuelink/tags.jsx";
 
@@ -62,7 +63,7 @@ const components = Object.assign({
   PlainResponse,
   Toolbar,
   TimeInfoTip,
-  DomTree
+  DomTree,
 });
 
 /**
@@ -81,7 +82,7 @@ function newDemo(componentName, propsGenerator, customContainerGenerator) {
   };
 }
 
-const TableDemoContainer = props => {
+const TableDemoContainer = (props) => {
   const { demo } = props;
   return (
     <DemoContainer demo={demo}>
@@ -92,7 +93,7 @@ const TableDemoContainer = props => {
   );
 };
 
-const RequestBodyContainer = props => {
+const RequestBodyContainer = (props) => {
   return (
     <div className="netTable">
       <TabBody { ...props }>{props.children}</TabBody>
@@ -100,7 +101,7 @@ const RequestBodyContainer = props => {
   );
 };
 
-const InfoTipContainer = props => {
+const InfoTipContainer = (props) => {
   const ref = ref => {
     ref.setAttribute("active", props.active || "true");
     ref.setAttribute("multiline", props.multiline || "true");
@@ -112,7 +113,7 @@ const InfoTipContainer = props => {
 };
 
 // demo data
-var demos = [
+const demos = [
   "App",
   newDemo("AboutTab", (demo, commonProps) => ({
     version: "VERSION",
@@ -143,13 +144,13 @@ var demos = [
     }))
   })),
   newDemo("Headers", null, (demo, demoProps) =>
-    <RequestBodyContainer id="Headers" selected="true"><Headers { ...demoProps } /></RequestBodyContainer>
+    <RequestBodyContainer id="Headers" selected={true}><Headers { ...demoProps } /></RequestBodyContainer>
   ),
   newDemo("PlainResponse", null, (demo, demoProps) =>
-    <RequestBodyContainer id="Response" selected="true"><PlainResponse { ...demoProps } /></RequestBodyContainer>
+    <RequestBodyContainer id="Response" selected={true}><PlainResponse { ...demoProps } /></RequestBodyContainer>
   ),
   newDemo("Highlighted", null, (demo, demoProps) =>
-    <RequestBodyContainer id="Response" selected="true"><Highlighted { ...demoProps } /></RequestBodyContainer>
+    <RequestBodyContainer id="Response" selected={true}><Highlighted { ...demoProps } /></RequestBodyContainer>
   ),
   "Toolbar",
   newDemo("TimeInfoTip", null, (demo, demoProps) => {
@@ -178,7 +179,7 @@ var demos = [
 
 // demo impl
 
-const DemoContainer = React.createClass({
+const DemoContainer = createReactClass({
   updatePreviewCols(ref) {
     // HACK!
     // Work out how to do this properly.
@@ -202,7 +203,7 @@ const DemoContainer = React.createClass({
   }
 });
 
-const DemoLinks = React.createClass({
+const DemoLinks = createReactClass({
   demoToLink(demoKey) {
     const demo = this.props.demos[demoKey];
     const href = "?demo=" + demo.componentName;
@@ -219,7 +220,7 @@ const DemoLinks = React.createClass({
   }
 });
 
-export default React.createClass({
+export default createReactClass({
   getInitialState() {
     return {
       harUrl: "../examples/softwareishard.com.har"

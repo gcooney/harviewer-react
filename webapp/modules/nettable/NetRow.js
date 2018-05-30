@@ -1,19 +1,21 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 import * as Url from "core/url";
 import * as Str from "core/string";
 import Bar from "./Bar";
 import PageTimingBar from "./PageTimingBar";
 
-const NetRow = React.createClass({
+const NetRow = createReactClass({
   displayName: "nettable/NetRow",
 
   propTypes: {
-    entry: React.PropTypes.object,
-    entryId: React.PropTypes.number,
-    opened: React.PropTypes.bool,
-    bars: React.PropTypes.array,
-    pageTimingBars: React.PropTypes.array,
-    onClick: React.PropTypes.func,
+    entry: PropTypes.object,
+    entryId: PropTypes.number,
+    opened: PropTypes.bool,
+    bars: PropTypes.array,
+    pageTimingBars: PropTypes.array,
+    onClick: PropTypes.func,
   },
 
   getHref(entry) {

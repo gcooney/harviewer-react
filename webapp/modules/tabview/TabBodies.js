@@ -1,13 +1,15 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 import TabBody from "./TabBody";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "tabview/TabBodies",
 
   propTypes: {
-    id: React.PropTypes.string,
-    selectedTabIdx: React.PropTypes.number,
-    tabs: React.PropTypes.array
+    id: PropTypes.string,
+    selectedTabIdx: PropTypes.number,
+    tabs: PropTypes.array,
   },
 
   render() {
@@ -22,5 +24,5 @@ export default React.createClass({
         {tabBodies}
       </div>
     );
-  }
+  },
 });

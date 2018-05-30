@@ -1,12 +1,14 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 import * as Lib from "core/lib";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "pagetimeline/PageTimelineCol",
 
   propTypes: {
-    maxElapsedTime: React.PropTypes.number,
-    page: React.PropTypes.object
+    maxElapsedTime: PropTypes.number,
+    page: PropTypes.object,
   },
 
   render() {

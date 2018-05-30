@@ -1,13 +1,15 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 import aboutHtml from "raw!tabs/aboutTab.html";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "tabs/AboutTab",
 
   propTypes: {
-    version: React.PropTypes.string,
-    harSpecURL: React.PropTypes.string,
-    harViewerExampleApp: React.PropTypes.string
+    version: PropTypes.string,
+    harSpecURL: PropTypes.string,
+    harViewerExampleApp: PropTypes.string,
   },
 
   replace(s, pattern, replaceWith) {
@@ -31,5 +33,5 @@ export default React.createClass({
     return (
       <div className="aboutBody" dangerouslySetInnerHTML={{ __html: html }}></div>
     );
-  }
+  },
 });

@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 import * as Date_ from "core/date";
 import * as Str from "core/string";
 import * as Dom from "core/dom";
@@ -115,13 +117,13 @@ function createPageTimingBars(pageTimings) {
   });
 }
 
-const NetTable = React.createClass({
+const NetTable = createReactClass({
   displayName: "nettable/NetTable",
 
   propTypes: {
-    entries: React.PropTypes.array,
-    model: React.PropTypes.object,
-    page: React.PropTypes.object,
+    entries: PropTypes.array,
+    model: PropTypes.object,
+    page: PropTypes.object,
   },
 
   getInitialState() {
@@ -238,7 +240,7 @@ const NetTable = React.createClass({
 });
 
 NetTable.contextTypes = {
-  infoTipHolder: React.PropTypes.object,
+  infoTipHolder: PropTypes.object,
 };
 
 export default NetTable;

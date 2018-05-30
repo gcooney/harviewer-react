@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 
 import * as Date_ from "core/date";
 import * as Str from "core/string";
@@ -30,11 +32,11 @@ const TimeInfoTipRow = (props) => {
 };
 
 TimeInfoTipRow.propTypes = {
-  collapsed: React.PropTypes.bool,
-  elapsed: React.PropTypes.number,
-  label: React.PropTypes.string,
-  type: React.PropTypes.string,
-  start: React.PropTypes.number,
+  collapsed: PropTypes.bool,
+  elapsed: PropTypes.number,
+  label: PropTypes.string,
+  type: PropTypes.string,
+  start: PropTypes.number,
 };
 
 const TimeInfoTipEventRow = (props) => {
@@ -54,9 +56,9 @@ const TimeInfoTipEventRow = (props) => {
 };
 
 TimeInfoTipEventRow.propTypes = {
-  classes: React.PropTypes.string,
-  label: React.PropTypes.string,
-  start: React.PropTypes.number,
+  classes: PropTypes.string,
+  label: PropTypes.string,
+  start: PropTypes.number,
 };
 
 function makeTimeInfoTipRows(timeInfoTipRowData, entry) {
@@ -123,14 +125,14 @@ const defaultTimeInfoTipEventRowData = [
   },
 ];
 
-export default React.createClass({
+export default createReactClass({
   displayName: "timeinfotip/TimeInfoTip",
 
   propTypes: {
-    entry: React.PropTypes.object,
-    page: React.PropTypes.object,
-    timeInfoTipRowData: React.PropTypes.object,
-    timeInfoTipEventRowData: React.PropTypes.object,
+    entry: PropTypes.object,
+    page: PropTypes.object,
+    timeInfoTipRowData: PropTypes.object,
+    timeInfoTipEventRowData: PropTypes.object,
   },
 
   getTimeInfoTipRowData(timeInfoTipRowData) {

@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 
 function paddingLeft(padding) {
   return {
@@ -6,7 +8,7 @@ function paddingLeft(padding) {
   };
 }
 
-const ObjectBox = props => {
+const ObjectBox = (props) => {
   const trClassName = [
     "memberRow",
     "domRow",
@@ -26,16 +28,16 @@ const ObjectBox = props => {
   );
 };
 ObjectBox.propTypes = {
-  hasChildren: React.PropTypes.boolean,
-  opened: React.PropTypes.boolean,
-  level: React.PropTypes.number,
-  objectKey: React.PropTypes.string,
-  objectValue: React.PropTypes.object,
-  type: React.PropTypes.string,
-  getDisplayString: React.PropTypes.func.isRequired
+  hasChildren: PropTypes.bool,
+  opened: PropTypes.bool,
+  level: PropTypes.number,
+  objectKey: PropTypes.string,
+  objectValue: PropTypes.object,
+  type: PropTypes.string,
+  getDisplayString: PropTypes.func.isRequired,
 };
 
-const ObjectBoxString = props => {
+const ObjectBoxString = (props) => {
   const props2 = Object.assign({}, {
     type: "string",
     getDisplayString: value => value
@@ -44,7 +46,7 @@ const ObjectBoxString = props => {
 };
 ObjectBoxString.propTypes = {};
 
-const ObjectBoxObject = props => {
+const ObjectBoxObject = (props) => {
   const props2 = Object.assign({}, {
     type: "object",
     getDisplayString: value => "Object",
@@ -53,11 +55,11 @@ const ObjectBoxObject = props => {
   return <ObjectBox { ...props2 } />;
 };
 ObjectBoxObject.propTypes = {
-  objectKey: React.PropTypes.string,
-  objectValue: React.PropTypes.object
+  objectKey: PropTypes.string,
+  objectValue: PropTypes.object,
 };
 
-const ObjectBoxArray = props => {
+const ObjectBoxArray = (props) => {
   const props2 = Object.assign({}, {
     type: "array",
     getDisplayString: value => `Array[$value.length]`,
@@ -66,15 +68,15 @@ const ObjectBoxArray = props => {
   return <ObjectBox { ...props2 } />;
 };
 ObjectBoxArray.propTypes = {
-  objectKey: React.PropTypes.string,
-  objectValue: React.PropTypes.object
+  objectKey: PropTypes.string,
+  objectValue: PropTypes.object,
 };
 
-export default React.createClass({
+export default createReactClass({
   displayName: "DomTree",
 
   propTypes: {
-    model: React.PropTypes.object
+    model: PropTypes.object,
   },
 
   render() {

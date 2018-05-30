@@ -1,35 +1,37 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 
 import setState from "../setState";
 import TabBar from "./TabBar";
 import TabBodies from "./TabBodies";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "tabview/TabView",
 
   propTypes: {
-    id: React.PropTypes.string,
-    selectedTabIdx: React.PropTypes.number,
-    tabs: React.PropTypes.array
+    id: PropTypes.string,
+    selectedTabIdx: PropTypes.number,
+    tabs: PropTypes.array,
   },
 
   getInitialState() {
     return {
-      selectedTabIdx: this.props.selectedTabIdx || 0
+      selectedTabIdx: this.props.selectedTabIdx || 0,
     };
   },
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (typeof nextProps.selectedTabIdx === "number") {
       setState(this, {
-        selectedTabIdx: nextProps.selectedTabIdx
+        selectedTabIdx: nextProps.selectedTabIdx,
       });
     }
   },
 
   onSelectTab(tab, tabIdx, tabs) {
     setState(this, {
-      selectedTabIdx: tabIdx
+      selectedTabIdx: tabIdx,
     });
   },
 
@@ -56,5 +58,5 @@ export default React.createClass({
         </tbody>
       </table>
     );
-  }
+  },
 });

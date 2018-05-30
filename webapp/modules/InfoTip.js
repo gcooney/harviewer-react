@@ -1,13 +1,15 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "InfoTip",
 
   propTypes: {
-    children: React.PropTypes.node,
-    onRef: React.PropTypes.func,
-    infoTipMargin: React.PropTypes.number,
-    infoTipWindowPadding: React.PropTypes.number,
+    children: PropTypes.node,
+    onRef: PropTypes.func,
+    infoTipMargin: PropTypes.number,
+    infoTipWindowPadding: PropTypes.number,
   },
 
   getInitialState() {
@@ -74,7 +76,7 @@ export default React.createClass({
     }
   },
 
-  componentWillUpdate(nextProps, nextState) {
+  UNSAFE_componentWillUpdate(nextProps, nextState) {
     this.refresh(nextProps, nextState);
   },
 

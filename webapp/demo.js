@@ -1,13 +1,10 @@
 import React from "react";
-import Perf from 'react-addons-perf';
 import { render } from "react-dom";
 
 import HarModel from "preview/harModel";
 import HarModelLoader from "preview/harModelLoader";
 
 import DemoApp from "./modules/Demo";
-
-window.Perf = Perf;
 
 function loadHar(harUrl, callback, errback) {
   harUrl = harUrl || "../examples/softwareishard.com.har";

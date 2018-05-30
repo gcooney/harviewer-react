@@ -1,12 +1,14 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 
 import homeHtml from "raw!tabs/homeTab.html";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "tabs/HomeTab",
 
   propTypes: {
-    requestTabChange: React.PropTypes.func
+    requestTabChange: PropTypes.func,
   },
 
   componentDidMount() {
@@ -37,5 +39,5 @@ export default React.createClass({
     return (
       <div ref="homeBody" className="homeBody" dangerouslySetInnerHTML={{ __html: homeHtml }}></div>
     );
-  }
+  },
 });

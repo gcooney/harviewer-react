@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 import { saveAs } from "file-saver";
 
 import setState from "../setState";
@@ -7,17 +9,17 @@ import PageTimeline from "../pagetimeline/PageTimeline";
 import PageTable from "../pagetable/PageTable";
 import PreviewTabToolbar from "./PreviewTabToolbar";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "tabs/PreviewTab",
 
   propTypes: {
-    model: React.PropTypes.object
+    model: PropTypes.object,
   },
 
   getInitialState() {
     return {
       timelineVisible: false,
-      statsVisible: false
+      statsVisible: false,
     };
   },
 

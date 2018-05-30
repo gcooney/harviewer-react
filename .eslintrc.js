@@ -6,7 +6,6 @@ module.exports = {
   plugins: [
     "react"
   ],
-  installedESLint: true,
   rules: {
     "indent": ["error", 2],
     "linebreak-style": "off",
@@ -28,6 +27,8 @@ module.exports = {
     "object-curly-spacing": ["error", "always"],
 
     "quotes": ["error", "double", { "allowTemplateLiterals": true }],
+
+    "require-jsdoc": "off",
   },
   env: {
     browser: true,

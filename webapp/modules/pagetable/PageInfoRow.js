@@ -1,12 +1,14 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 import NetTable from "../nettable/NetTable";
 
-const PageInfoRow = React.createClass({
+const PageInfoRow = createReactClass({
   displayName: "pagetable/PageInfoRow",
 
   propTypes: {
-    model: React.PropTypes.object,
-    page: React.PropTypes.object,
+    model: PropTypes.object,
+    page: PropTypes.object,
   },
 
   shouldComponentUpdate(nextProps, nextState) {

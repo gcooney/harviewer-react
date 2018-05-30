@@ -1,14 +1,15 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 import * as Mime from "core/mime";
-import dp from "syntax-highlighter/shCore";
 
 import { canDecode } from "./decoder";
 
-const Highlighted = React.createClass({
+const Highlighted = createReactClass({
   displayName: "requestbodies/Highlighted",
 
   propTypes: {
-    entry: React.PropTypes.object
+    entry: PropTypes.object,
   },
 
   maybeDoHighlighting() {
@@ -17,7 +18,7 @@ const Highlighted = React.createClass({
     pre.innerText = "";
     const text = entry.response.content.text;
     pre.appendChild(document.createTextNode(text));
-    dp.SyntaxHighlighter.highlight(pre);
+    SyntaxHighlighter.highlight(pre);
   },
 
   componentDidMount() {

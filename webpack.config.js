@@ -5,7 +5,7 @@ const GitRevisionPlugin = require("git-revision-webpack-plugin");
 
 // Path to existing HAR Viewer. We can reuse some code from the following modules:
 //   "core", "nls", "preview", "tabs", "syntax-highlighter"
-const pathToLegacyHarViewerScripts = path.join(__dirname, "../harviewer2/webapp/scripts");
+const pathToLegacyHarViewerScripts = path.join(__dirname, "../../harviewer2/webapp/scripts");
 
 function addPrefixAndResolve(prefix) {
   return (name) => {
@@ -26,6 +26,7 @@ const definePlugin = new webpack.DefinePlugin({
 });
 
 module.exports = {
+  mode: "development",
   context: path.join(__dirname, "webapp"),
   entry: {
     main: "./main.js",
@@ -45,7 +46,7 @@ module.exports = {
         test: /\.jsx?$/,
         loader: "babel-loader",
         options: {
-          presets: ["es2015", "react"].map(addPrefixAndResolve("babel-preset-")),
+          presets: ["env", "react"].map(addPrefixAndResolve("babel-preset-")),
           // transform-runtime required for things like Object.assign() for browsers that don't support that.
           // rest-spread transform required for "valuelink"" module
           plugins: ["transform-object-assign", "transform-object-rest-spread"].map(addPrefixAndResolve("babel-plugin-")),

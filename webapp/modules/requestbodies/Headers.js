@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 import * as Str from "core/string";
 
 function getParamValue(value) {
@@ -19,8 +21,8 @@ const ParamRow = props => {
 };
 
 ParamRow.propTypes = {
-  name: React.PropTypes.string,
-  value: React.PropTypes.string
+  name: PropTypes.string,
+  value: PropTypes.string,
 };
 
 const TitleRow = props => {
@@ -32,15 +34,15 @@ const TitleRow = props => {
 };
 
 TitleRow.propTypes = {
-  title: React.PropTypes.string,
-  titleType: React.PropTypes.string
+  title: PropTypes.string,
+  titleType: PropTypes.string,
 };
 
-export default React.createClass({
+export default createReactClass({
   displayName: "requestbodies/Headers",
 
   propTypes: {
-    entry: React.PropTypes.object
+    entry: PropTypes.object,
   },
 
   render() {

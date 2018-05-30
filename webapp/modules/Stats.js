@@ -1,4 +1,5 @@
 import React from "react";
+import createReactClass from "create-react-class";
 import TimingPie from "./pie/TimingPie";
 import ContentPie from "./pie/ContentPie";
 import TrafficPie from "./pie/TrafficPie";
@@ -20,7 +21,7 @@ let Pie = {
   }
 };
 
-export default React.createClass({
+export default createReactClass({
   displayName: "Stats",
 
   render() {

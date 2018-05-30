@@ -1,14 +1,16 @@
 import React from "react";
+import PropTypes from "prop-types";
+import createReactClass from "create-react-class";
 import PageTimelineCol from "./PageTimelineCol";
 import PageDescContainer from "./PageDescContainer";
 import PageTimelineTable from "./PageTimelineTable";
 
-export default React.createClass({
+export default createReactClass({
   displayName: "pagetimeline/PageTimeline",
 
   propTypes: {
-    model: React.PropTypes.object,
-    page: React.PropTypes.object
+    model: PropTypes.object,
+    page: PropTypes.object,
   },
 
   render() {
