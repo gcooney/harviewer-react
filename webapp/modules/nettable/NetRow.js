@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import createReactClass from "create-react-class";
-import * as Url from "core/url";
-import * as Str from "core/string";
+import * as Url from "../core/url";
+import * as Str from "../core/string";
 import Bar from "./Bar";
 import PageTimingBar from "./PageTimingBar";
 

@@ -1,7 +1,7 @@
 import createPie from "./Pie";
-import * as Mime from "core/mime";
-import * as Str from "core/string";
-import Strings from "amdi18n!nls/harStats";
+import * as Mime from "../core/mime";
+import * as Str from "../core/string";
+import Strings from "amdi18n-loader!../nls/harStats";
 
 var jsTypes = {
   "text/javascript": 1,

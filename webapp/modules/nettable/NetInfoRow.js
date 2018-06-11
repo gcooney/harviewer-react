@@ -1,6 +1,6 @@
 import React from "react";
 
-import Strings from "amdi18n!nls/requestBody";
+import Strings from "amdi18n-loader!../nls/requestBody";
 
 import TabView from "../tabview/TabView";
 import Headers from "../requestbodies/Headers";

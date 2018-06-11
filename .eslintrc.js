@@ -1,10 +1,12 @@
 module.exports = {
+  parser: "babel-eslint",
   extends: [
     "google",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
   ],
   plugins: [
-    "react"
+    "babel",
+    "react",
   ],
   rules: {
     "indent": ["error", 2],
@@ -17,7 +19,7 @@ module.exports = {
       // JSX expression: Line starting with spaces then "<"
       // JSX assignment: Line containing " = <\w"
       // JSX return: Line starting with "return <\w"
-      ignorePattern: "^ *<| = <\\w|^ *return <\\w"
+      ignorePattern: "^ *<| = <\\w|^ *return <\\w",
     }],
 
     // E.g. to allow
@@ -29,10 +31,14 @@ module.exports = {
     "quotes": ["error", "double", { "allowTemplateLiterals": true }],
 
     "require-jsdoc": "off",
+
+    // Use "babel/no-invalid-this" because we use ES7 class properties
+    "no-invalid-this": "off",
+    "babel/no-invalid-this": ["error", "always"],
   },
   env: {
     browser: true,
-    jquery: true
+    jquery: true,
   },
   parserOptions: {
     "ecmaVersion": 6,
@@ -42,6 +48,6 @@ module.exports = {
       "classes": true,
       "defaultParams": true,
       "experimentalObjectRestSpread": true
-    }
-  }
+    },
+  },
 };

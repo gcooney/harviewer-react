@@ -1,4 +1,4 @@
-import Strings from "amdi18n!nls/requestList";
+import Strings from "amdi18n-loader!../nls/requestList";
 
 export default [
   {

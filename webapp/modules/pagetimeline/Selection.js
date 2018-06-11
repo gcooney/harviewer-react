@@ -1,5 +1,5 @@
 import React from "react";
-import * as Lib from "core/lib";
+import * as Lib from "../core/lib";
 
 let Selection = {
   isSelected: function(bar) {

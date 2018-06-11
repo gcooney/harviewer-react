@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import createReactClass from "create-react-class";
-import * as Lib from "core/lib";
+import * as Lib from "../core/lib";
 
 export default createReactClass({
   displayName: "pagetimeline/PageTimelineCol",

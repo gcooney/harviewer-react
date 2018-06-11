@@ -1,5 +1,5 @@
-import HarModel from "preview/harModel";
-import * as Date_ from "core/date";
+import HarModel from "../preview/harModel";
+import * as Date_ from "../core/date";
 
 export function summarizeEntries(entries) {
   let cachedSize = 0;

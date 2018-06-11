@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import createReactClass from "create-react-class";
-import * as Str from "core/string";
+import * as Str from "../core/string";
 
 export default createReactClass({
   displayName: "requestbodies/PlainResponse",

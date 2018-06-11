@@ -1,8 +1,8 @@
 import React from "react";
 import { render } from "react-dom";
 
-import HarModel from "preview/harModel";
-import HarModelLoader from "preview/harModelLoader";
+import HarModel from "./modules/preview/harModel";
+import HarModelLoader from "./modules/preview/harModelLoader";
 
 import DemoApp from "./modules/Demo";
 

@@ -4,7 +4,7 @@ import Link from "valuelink";
 import { Input } from "valuelink/tags.jsx";
 
 import App from "./App";
-import HarModel from "preview/harModel";
+import HarModel from "./preview/harModel";
 import Stats from "./Stats";
 import InfoTip from "./InfoTip";
 import InfoTipHolder from "./InfoTipHolder";

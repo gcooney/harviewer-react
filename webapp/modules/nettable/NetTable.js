@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import createReactClass from "create-react-class";
-import * as Date_ from "core/date";
-import * as Str from "core/string";
-import * as Dom from "core/dom";
-import * as Css from "core/css";
+import * as Date_ from "../core/date";
+import * as Str from "../core/string";
+import * as Dom from "../core/dom";
+import * as Css from "../core/css";
 
 import setState from "../setState";
 import booleanFlipper from "../booleanFlipper";
@@ -143,9 +143,11 @@ const NetTable = createReactClass({
 
   showInfoTip(infoTip, target, x, y, rangeParent, rangeOffset) {
     const { page } = this.props;
-    const table = Dom.getAncestorByClass(target, "netTable");
-    if (!table || table.getAttribute("data-page-id") !== page.id) {
-      return;
+    if (page) {
+      const table = Dom.getAncestorByClass(target, "netTable");
+      if (!table || table.getAttribute("data-page-id") !== page.id) {
+        return;
+      }
     }
     const row = Dom.getAncestorByClass(target, "netRow");
     if (row) {
@@ -189,6 +191,7 @@ const NetTable = createReactClass({
 
     const m = new NetModel();
     const phases = Phases.calculatePhases(model.input, page, defaultTimingDefinitions, null, null);
+    console.log(model, page, phases);
     const phase = phases.phases[0];
 
     const phaseStartTime = phase.startTime;
@@ -220,7 +223,7 @@ const NetTable = createReactClass({
     const netRows = this.createNetRows(entries);
 
     return (
-      <table className="netTable" cellPadding="0" cellSpacing="0" data-page-id={page.id}>
+      <table className="netTable" cellPadding="0" cellSpacing="0" data-page-id={page ? page.id : null}>
         <tbody>
           <tr className="netSizerRow">
             <td className="netHrefCol netCol" width="20%"></td>

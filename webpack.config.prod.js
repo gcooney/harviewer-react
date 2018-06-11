@@ -1,5 +1,6 @@
 const config = require("./webpack.config");
 
-config.output.filename = "./dist/[name].entry.js";
+config.mode = "production";
+config.output.filename = "./[name].entry.js";
 
 module.exports = config;

@@ -1,43 +1,62 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
 
-import homeHtml from "raw!tabs/homeTab.html";
+import Url from "../core/url";
+import AppContext from "../AppContext";
+import homeHtml from "raw-loader!./homeTab.html";
 
-export default createReactClass({
-  displayName: "tabs/HomeTab",
+// TODO Move me
+if (!Element.prototype.matches) {
+  Element.prototype.matches = Element.prototype.msMatchesSelector;
+}
 
-  propTypes: {
-    requestTabChange: PropTypes.func,
-  },
+function on(e, selector, listener, context) {
+  const { target } = e;
+  if (target.matches(selector)) {
+    listener.call(context || this, e);
+  }
+}
 
-  componentDidMount() {
-    const el = this.refs.homeBody;
-    $(el).on("click", ".example", this.onExampleClick);
-    $(el).on("click", ".linkAbout", this.onAboutClick);
-  },
+export class HomeTab extends React.Component {
+  onClick = (e) => {
+    on(e, ".example", this.onExampleClick);
+    on(e, ".linkAbout", this.onAboutClick);
+    on(e, "#appendPreview", this.onPreviewClick);
+  }
 
-  componentWillUnmount() {
-    const el = this.refs.homeBody;
-    $(el).off("click", ".example", this.onExampleClick);
-    $(el).off("click", ".linkAbout", this.onAboutClick);
-  },
-
-  onExampleClick(e) {
-    const target = e.target;
+  onExampleClick = (e) => {
+    e.preventDefault();
+    const { target } = e;
     const har = target.getAttribute("har");
     const href = window.location.href;
-    const index = href.indexOf("?");
-    window.location = href.substr(0, index) + "?har=" + har;
-  },
+    const page = href.split("?")[0];
+    window.location = page + "?har=" + har;
+  }
 
-  onAboutClick(e) {
+  onAboutClick = (e) => {
+    e.preventDefault();
     this.props.requestTabChange("About");
-  },
+  }
+
+  onPreviewClick = (e) => {
+    const json = $("#sourceEditor").val();
+    const { appendPreview } = this.props;
+    appendPreview(json);
+  }
 
   render() {
     return (
-      <div ref="homeBody" className="homeBody" dangerouslySetInnerHTML={{ __html: homeHtml }}></div>
+      <div className="homeBody" dangerouslySetInnerHTML={{ __html: homeHtml }} onClick={this.onClick}></div>
     );
-  },
-});
+  }
+};
+
+HomeTab.propTypes = {
+  requestTabChange: PropTypes.func,
+};
+
+export default (props) => (
+  <AppContext.Consumer>
+    {({ appendPreview }) => <HomeTab {...props} appendPreview={appendPreview} />}
+  </AppContext.Consumer>
+);

@@ -1,14 +1,14 @@
 import React from "react";
-import createReactClass from "create-react-class";
 
-import HarModel from "preview/harModel";
-import Loader from "preview/harModelLoader";
+import HarModel from "./preview/harModel";
+import Loader from "./preview/harModelLoader";
 
-import homeTabStrings from "amdi18n!nls/homeTab";
-import harViewerStrings from "amdi18n!nls/harViewer";
-import previewTabStrings from "amdi18n!nls/previewTab";
-import domTabStrings from "amdi18n!nls/domTab";
+import homeTabStrings from "amdi18n-loader!./nls/homeTab";
+import harViewerStrings from "amdi18n-loader!./nls/harViewer";
+import previewTabStrings from "amdi18n-loader!./nls/previewTab";
+import domTabStrings from "amdi18n-loader!./nls/domTab";
 
+import AppContext from "./AppContext";
 import setState from "./setState";
 import buildInfo from "./buildInfo";
 import InfoTipHolder from "./InfoTipHolder";
@@ -17,7 +17,17 @@ import AboutTab from "./tabs/AboutTab";
 import HomeTab from "./tabs/HomeTab";
 import PreviewTab from "./tabs/PreviewTab";
 
-export default createReactClass({
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      harModels: [],
+      previewCols: "url status size timeline",
+      selectedTabIdx: 0,
+      appendPreview: this.appendPreview,
+    };
+  }
+
   createAboutTab(harViewerExampleApp) {
     const versionStr = buildInfo.version + "/" + buildInfo.gitVersion;
     const aboutTab = {
@@ -31,10 +41,10 @@ export default createReactClass({
       </div>
     );
     return aboutTab;
-  },
+  }
 
   createTabs() {
-    const { model } = this.state;
+    const { harModels } = this.state;
 
     let harViewerExampleApp = window.location.href.split("?")[0];
     if (!harViewerExampleApp.endsWith("/")) {
@@ -45,70 +55,69 @@ export default createReactClass({
       {
         id: "Home",
         label: homeTabStrings.homeTabLabel,
-        body: <HomeTab requestTabChange={tabName => setState(this, { selectedTabIdx: 3 })} />
+        body: <HomeTab requestTabChange={(tabName) => setState(this, { selectedTabIdx: 3 })} />,
       },
       {
         id: "Preview",
         label: previewTabStrings.previewTabLabel,
-        body: <PreviewTab model={model} />
+        body: <PreviewTab harModels={harModels} />,
       },
       {
         id: "DOM",
-        label: domTabStrings.domTabLabel
+        label: domTabStrings.domTabLabel,
       },
       this.createAboutTab(harViewerExampleApp),
       {
         id: "Schema",
-        label: harViewerStrings.schemaTabLabel
+        label: harViewerStrings.schemaTabLabel,
       }
     ];
 
     return tabs;
-  },
+  }
 
   updatePreviewCols() {
     const content = document.getElementById("content");
     content.setAttribute("previewCols", this.state.previewCols);
-  },
+  }
 
-  getInitialState() {
-    return {
-      model: new HarModel(),
-      previewCols: "url status size timeline",
-      selectedTabIdx: 0
-    };
-  },
+  appendPreview = (harObjectOrString) => {
+    const { harModels } = this.state;
+    const model = new HarModel();
+    const har = (typeof harObjectOrString === "string") ? JSON.parse(harObjectOrString) : harObjectOrString;
+    model.append(har);
+    setState(this, {
+      harModels: harModels.concat([model]),
+      selectedTabIdx: 1,
+    });
+  }
 
   componentDidMount() {
     this.updatePreviewCols();
 
     Loader.run((response) => {
-      const model = new HarModel();
-      const har = (typeof response === "string") ? JSON.parse(response) : response;
-      model.append(har);
-      setState(this, {
-        model,
-        selectedTabIdx: 1
-      });
+      this.appendPreview(response);
     }, (err) => console.error(err));
-  },
+  }
 
   componentWillUnmount() {
-  },
+  }
 
   componentDidUpdate(prevProps, prevState) {
     console.log(prevProps, prevState);
     this.updatePreviewCols();
-  },
+  }
 
   render() {
     const { selectedTabIdx } = this.state;
 
     const tabs = this.createTabs();
     return (
-      <InfoTipHolder>
-        <TabView tabs={tabs} selectedTabIdx={selectedTabIdx} id="harView" />
-      </InfoTipHolder>
+      <AppContext.Provider value={this.state}>
+        <InfoTipHolder>
+          <TabView tabs={tabs} selectedTabIdx={selectedTabIdx} id="harView" />
+        </InfoTipHolder>
+      </AppContext.Provider>
     );
   }
-});
+};

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import createReactClass from "create-react-class";
 import { render, unmountComponentAtNode } from "react-dom";
 
-import * as Lib from "core/lib";
+import * as Lib from "./core/lib";
 
 import InfoTip from "./InfoTip";
 

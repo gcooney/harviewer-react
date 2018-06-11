@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import createReactClass from "create-react-class";
-import * as Lib from "core/lib";
-import * as HarModel from "preview/harModel";
-import Strings from "amdi18n!nls/PageTimeline";
+import * as Lib from "../core/lib";
+import * as HarModel from "../preview/harModel";
+import Strings from "amdi18n-loader!../nls/PageTimeline";
 
 export default createReactClass({
   displayName: "pagetimeline/PageDescContainer",

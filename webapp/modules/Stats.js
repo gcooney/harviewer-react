@@ -4,7 +4,7 @@ import TimingPie from "./pie/TimingPie";
 import ContentPie from "./pie/ContentPie";
 import TrafficPie from "./pie/TrafficPie";
 import CachePie from "./pie/CachePie";
-import * as Lib from "core/lib";
+import * as Lib from "./core/lib";
 
 let Pie = {
   showInfoTip: function(infoTip, target, x, y) {

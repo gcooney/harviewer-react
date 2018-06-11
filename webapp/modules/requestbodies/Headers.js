@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import createReactClass from "create-react-class";
-import * as Str from "core/string";
+import * as Str from "../core/string";
 
 function getParamValue(value) {
   // This value is inserted into PRE element and so, make sure the HTML isn't escaped (1210).

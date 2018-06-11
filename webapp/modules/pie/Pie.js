@@ -1,6 +1,6 @@
 import React from "react";
 import createReactClass from "create-react-class";
-import * as Lib from "core/lib";
+import * as Lib from "../core/lib";
 
 export default function createPie(fields) {
   return createReactClass(Object.assign({}, {

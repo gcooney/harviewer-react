@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
 
 import setState from "../setState";
 import booleanFlipper from "../booleanFlipper";
@@ -8,49 +7,52 @@ import booleanFlipper from "../booleanFlipper";
 import PageRow from "./PageRow";
 import PageInfoRow from "./PageInfoRow";
 
-export default createReactClass({
-  displayName: "pagetable/PageTable",
+export default class PageTable extends React.Component {
+  constructor(props) {
+    super(props);
 
-  propTypes: {
-    model: PropTypes.object,
-  },
-
-  getInitialState() {
     const { model } = this.props;
     if (!model || !model.input) {
-      return {};
+      this.state = {};
+    } else {
+      const pages = model.input.log.pages || [];
+      this.state = {
+        pageRowExpandedState: pages.map((page, i) => false),
+      };
     }
-
-    const pages = model.input.log.pages;
-    return {
-      pageRowExpandedState: pages.map((page, i) => false),
-    };
-  },
+  }
 
   createPageRows(model) {
+    const rows = [];
+
     if (!model || !model.input) {
-      return [];
+      return rows;
     }
 
-    const pages = model.input.log.pages;
-    const { pageRowExpandedState } = this.state;
+    const { pages } = model.input.log;
 
-    // Use concat to flatten an array of arrays to a flat array.
-    return [].concat(pages.map((page, i) => {
-      const opened = pageRowExpandedState[i];
-      const pageRow = <PageRow key={"PageRow" + i} page={page} opened={opened} onClick={this.onPageRowClick.bind(this, i)} />;
-      if (!opened) {
-        return pageRow;
-      }
-      return [pageRow, <PageInfoRow key={"PageInfoRow" + i} model={model} page={page} />];
-    }));
-  },
+    if (pages) {
+      const { pageRowExpandedState } = this.state;
+
+      // Use concat to flatten an array of arrays to a flat array.
+      return rows.concat(pages.map((page, i) => {
+        const opened = pageRowExpandedState[i];
+        const pageRow = <PageRow key={"PageRow" + i} page={page} opened={opened} onClick={this.onPageRowClick.bind(this, i)} />;
+        if (!opened) {
+          return pageRow;
+        }
+        return [pageRow, <PageInfoRow key={"PageInfoRow" + i} model={model} page={page} />];
+      }));
+    }
+
+    return rows;
+  }
 
   onPageRowClick(pageRowIdx) {
     setState(this, {
       pageRowExpandedState: this.state.pageRowExpandedState.map(booleanFlipper(pageRowIdx))
     });
-  },
+  }
 
   render() {
     const { model } = this.props;
@@ -63,5 +65,11 @@ export default createReactClass({
         </tbody>
       </table>
     );
-  },
-});
+  }
+};
+
+PageTable.displayName = "pagetable/PageTable";
+
+PageTable.propTypes = {
+  model: PropTypes.object,
+};

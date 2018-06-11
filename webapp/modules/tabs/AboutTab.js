@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import createReactClass from "create-react-class";
-import aboutHtml from "raw!tabs/aboutTab.html";
+import aboutHtml from "raw-loader!./aboutTab.html";
 
 export default createReactClass({
   displayName: "tabs/AboutTab",

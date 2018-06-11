@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import * as Str from "core/string";
+import * as Str from "../core/string";
 
 function getPageTitle(page) {
   return Str.cropString(page.title, 100);

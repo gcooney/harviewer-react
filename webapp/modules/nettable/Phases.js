@@ -1,5 +1,5 @@
-import HarModel from "preview/harModel";
-import * as Date_ from "core/date";
+import HarModel from "../preview/harModel";
+import * as Date_ from "../core/date";
 
 /**
  * @object This object represents a phase that joins related requests into groups (phases).
