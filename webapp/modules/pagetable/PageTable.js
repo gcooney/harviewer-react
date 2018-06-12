@@ -16,8 +16,12 @@ export default class PageTable extends React.Component {
       this.state = {};
     } else {
       const pages = model.input.log.pages || [];
+      const pageRowExpandedState = pages.map(() => false);
+      if (pageRowExpandedState.length === 1) {
+        pageRowExpandedState[0] = true;
+      }
       this.state = {
-        pageRowExpandedState: pages.map((page, i) => false),
+        pageRowExpandedState,
       };
     }
   }
@@ -49,8 +53,9 @@ export default class PageTable extends React.Component {
   }
 
   onPageRowClick(pageRowIdx) {
+    const pageRowExpandedState = this.state.pageRowExpandedState.map(booleanFlipper(pageRowIdx));
     setState(this, {
-      pageRowExpandedState: this.state.pageRowExpandedState.map(booleanFlipper(pageRowIdx))
+      pageRowExpandedState,
     });
   }
 
