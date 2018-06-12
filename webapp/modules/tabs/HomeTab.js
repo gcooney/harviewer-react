@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import Cookies from "../core/cookies";
 import Url from "../core/url";
 import AppContext from "../AppContext";
 import homeHtml from "raw-loader!./homeTab.html";
@@ -22,6 +23,7 @@ export class HomeTab extends React.Component {
     on(e, ".example", this.onExampleClick);
     on(e, ".linkAbout", this.onAboutClick);
     on(e, "#appendPreview", this.onPreviewClick);
+    on(e, "#validate", this.onValidateClick);
   }
 
   onExampleClick = (e) => {
@@ -42,6 +44,12 @@ export class HomeTab extends React.Component {
     const json = $("#sourceEditor").val();
     const { appendPreview } = this.props;
     appendPreview(json);
+  }
+
+  onValidateClick = (e) => {
+    e.stopPropagation();
+    const checked = e.target.checked;
+    Cookies.setCookie("validate", checked);
   }
 
   render() {
