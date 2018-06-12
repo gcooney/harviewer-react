@@ -1,27 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
+
 import Strings from "amdi18n-loader!../nls/requestList";
 import * as Str from "../core/string";
 import { calculateSummaryInfo } from "./NetSummaryRowModel";
 
-export default createReactClass({
-  displayName: "nettable/NetSummaryRow",
-
-  propTypes: {
-    entries: PropTypes.array.isRequired,
-    page: PropTypes.object,
-    summaryInfo: PropTypes.object,
-  },
-
+class NetSummaryRow extends React.Component {
   formatRequestCount(count) {
     return count + " " + (count === 1 ? Strings.request : Strings.requests);
-  },
+  }
 
   formatTotalTime(totalTime, onLoadTime) {
     const onLoadStr = onLoadTime > 0 ? " (onload: " + Str.formatTime(onLoadTime) + ")" : "";
     return Str.formatTime(totalTime) + onLoadStr;
-  },
+  }
 
   getCacheSizeContent(cachedSize) {
     if (cachedSize <= 0) {
@@ -29,11 +21,11 @@ export default createReactClass({
     }
     return [
       "(",
-      <span className=" ">{Str.formatSize(cachedSize)}</span>,
-      <span className=" "> {Strings.summaryFromCache}</span>,
+      <span key="cachedSize" className=" ">{Str.formatSize(cachedSize)}</span>,
+      <span key="summaryFromCache" className=" "> {Strings.summaryFromCache}</span>,
       ")",
     ];
-  },
+  }
 
   render() {
     let { page, entries, summaryInfo } = this.props;
@@ -72,5 +64,13 @@ export default createReactClass({
         <td className="netOptionsCol netCol "></td>
       </tr>
     );
-  },
-});
+  }
+};
+
+NetSummaryRow.propTypes = {
+  entries: PropTypes.array.isRequired,
+  page: PropTypes.object,
+  summaryInfo: PropTypes.object,
+};
+
+export default NetSummaryRow;
