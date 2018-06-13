@@ -8,6 +8,7 @@ import PlainResponse from "../requestbodies/PlainResponse";
 import Highlighted from "../requestbodies/Highlighted";
 import URLParameters from "../requestbodies/URLParameters";
 import SendData from "../requestbodies/SendData";
+import DataURL from "../requestbodies/DataURL";
 
 const responseBodyComponents = {
   Headers: {
@@ -35,6 +36,11 @@ const responseBodyComponents = {
     id: "Post",
     // TODO, this has to be determined on-the-fly by entry.request.method
     label: "Post",
+  },
+  DataURL: {
+    Component: DataURL,
+    id: "DataURL",
+    label: Strings.DataURL,
   },
 };
 

@@ -18,6 +18,10 @@ class PlainResponse extends React.Component {
   }
 }
 
+PlainResponse.canShowEntry = function(entry) {
+  return (entry.response.content.text && entry.response.content.text.length > 0);
+};
+
 PlainResponse.propTypes = {
   entry: PropTypes.object,
 };

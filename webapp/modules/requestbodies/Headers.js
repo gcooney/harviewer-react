@@ -29,6 +29,10 @@ class Headers extends React.Component {
   }
 }
 
+Headers.canShowEntry = function(entry) {
+  return (entry.response.headers.length > 0);
+};
+
 Headers.propTypes = {
   entry: PropTypes.object,
 };
