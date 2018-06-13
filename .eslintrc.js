@@ -34,7 +34,7 @@ module.exports = {
 
     // Use "babel/no-invalid-this" because we use ES7 class properties
     "no-invalid-this": "off",
-    "babel/no-invalid-this": ["error", "always"],
+    "babel/no-invalid-this": "error",
   },
   env: {
     browser: true,
