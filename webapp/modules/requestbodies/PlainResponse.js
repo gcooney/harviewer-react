@@ -1,19 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
+
 import * as Str from "../core/string";
 
-export default createReactClass({
-  displayName: "requestbodies/PlainResponse",
-
-  propTypes: {
-    entry: PropTypes.object,
-  },
-
+class PlainResponse extends React.Component {
   render() {
     const { entry } = this.props;
-
-    var text = entry.response.content.text;
+    const { text } = entry.response.content;
 
     return (
       <div className="netInfoResponseText netInfoText">
@@ -23,4 +16,10 @@ export default createReactClass({
       </div>
     );
   }
-});
+}
+
+PlainResponse.propTypes = {
+  entry: PropTypes.object,
+};
+
+export default PlainResponse;

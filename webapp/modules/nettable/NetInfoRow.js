@@ -6,35 +6,54 @@ import TabView from "../tabview/TabView";
 import Headers from "../requestbodies/Headers";
 import PlainResponse from "../requestbodies/PlainResponse";
 import Highlighted from "../requestbodies/Highlighted";
+import URLParameters from "../requestbodies/URLParameters";
+import SendData from "../requestbodies/SendData";
+
+const responseBodyComponents = {
+  Headers: {
+    Component: Headers,
+    id: "Headers",
+    label: Strings.Headers,
+  },
+  PlainResponse: {
+    Component: PlainResponse,
+    id: "Response",
+    label: Strings.Response,
+  },
+  Highlighted: {
+    Component: Highlighted,
+    id: "Highlighted",
+    label: Strings.Highlighted,
+  },
+  URLParameters: {
+    Component: URLParameters,
+    id: "Params",
+    label: Strings.URLParameters,
+  },
+  SendData: {
+    Component: SendData,
+    id: "Post",
+    // TODO, this has to be determined on-the-fly by entry.request.method
+    label: "Post",
+  },
+};
 
 function createTabs(props) {
   const { entry } = props;
   const tabs = [];
-  if (!Headers.canShowEntry || Headers.canShowEntry(entry)) {
-    tabs.push({
-      id: "Headers",
-      label: Strings.Headers,
-      body: <Headers entry={entry} />
-    });
-  }
-  if (!PlainResponse.canShowEntry || PlainResponse.canShowEntry(entry)) {
-    tabs.push({
-      id: "PlainResponse",
-      label: Strings.Response,
-      body: <PlainResponse entry={entry} />
-    });
-  }
-  if (!Highlighted.canShowEntry || Highlighted.canShowEntry(entry)) {
-    tabs.push({
-      id: "Highlighted",
-      label: Strings.Highlighted,
-      body: <Highlighted entry={entry} />
-    });
-  }
+  Object.keys(responseBodyComponents).forEach((name) => {
+    const Component = responseBodyComponents[name].Component;
+    if (!Component.canShowEntry || Component.canShowEntry(entry)) {
+      const info = responseBodyComponents[name];
+      tabs.push(Object.assign({}, info, {
+        body: <Component entry={entry} />,
+      }));
+    }
+  });
   return tabs;
 }
 
-const NetInfoRow = props => {
+function NetInfoRow(props) {
   const tabs = createTabs(props);
   return (
     <tr className="netInfoRow">
@@ -44,7 +63,5 @@ const NetInfoRow = props => {
     </tr>
   );
 };
-
-NetInfoRow.displayName = "nettable/NetInfoRow";
 
 export default NetInfoRow;

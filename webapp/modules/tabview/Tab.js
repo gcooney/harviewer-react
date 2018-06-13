@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default class Tab extends React.Component {
+class Tab extends React.Component {
   constructor(props) {
     super(props);
     this.linkRef = React.createRef();
@@ -31,8 +31,6 @@ export default class Tab extends React.Component {
   }
 };
 
-Tab.displayName = "tabview/Tab";
-
 Tab.propTypes = {
   content: PropTypes.node,
   id: PropTypes.string,
@@ -41,3 +39,5 @@ Tab.propTypes = {
   selected: PropTypes.bool,
   title: PropTypes.string,
 };
+
+export default Tab;
