@@ -7,7 +7,7 @@
     "copy:core": "node bin/copy-core.js",
     "deploy-gh-pages": "node deploy/deploy.js",
     "lint": "eslint ./webapp",
-    "start": "webpack-dev-server --inline --hot --compress --content-base ./",
+    "start": "webpack-dev-server --disableHostCheck=true --inline --hot --compress --content-base ./",
     "test": "echo \"Error: no test specified\" && exit 1",
     "webapp-build": "webpack --progress --colors --config webpack.config.prod.js",
     "webapp-build-prod": "npm run webapp-build -- -p"
