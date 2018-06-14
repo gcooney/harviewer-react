@@ -9,8 +9,8 @@
     "lint": "eslint ./webapp",
     "start": "webpack-dev-server --disableHostCheck=true --inline --hot --compress --content-base ./",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "webapp-build": "webpack --progress --colors --config webpack.config.prod.js",
-    "webapp-build-prod": "npm run webapp-build -- -p"
+    "build": "webpack --config=webpack.config.js",
+    "build:prod": "webpack --config=webpack.config.prod.js"
   },
   "author": {
     "name": "gitgrimbo",
@@ -56,6 +56,7 @@
     "urijs": "^1.19.1",
     "url-loader": "^1.0.1",
     "webpack": "^4.12.0",
+    "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cli": "^3.0.6",
     "webpack-dev-server": "^3.1.4"
   },

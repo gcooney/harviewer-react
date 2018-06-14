@@ -2,6 +2,7 @@ const webpack = require("webpack");
 const path = require("path");
 const packageJson = require("./package.json");
 const GitRevisionPlugin = require("git-revision-webpack-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 // Export some data to the webpack build.  See buildInfo.js.
 const gitRevisionPlugin = new GitRevisionPlugin();
@@ -17,8 +18,8 @@ module.exports = {
   mode: "development",
   //context: path.join(__dirname, "webapp"),
   entry: {
-    main: "./webapp/main.js",
-    demo: "./webapp/demo.js",
+    main: ["babel-polyfill", "./webapp/main.js"],
+    demo: ["babel-polyfill", "./webapp/demo.js"],
   },
   output: {
     filename: "./webapp/[name].entry.js",
@@ -26,30 +27,37 @@ module.exports = {
   devtool: "source-map",
   plugins: [
     definePlugin,
+    new BundleAnalyzerPlugin({
+      analyzerMode: "static",
+      openAnalyzer: false,
+    }),
   ],
   module: {
     rules: [
       {
         // .js or .jsx
         test: /\.jsx?$/,
-        loader: "babel-loader",
-        options: {
-          presets: [
-            ["env", {/*
-              useBuiltIns: true,
-              targets: {
-                "ie": "11",
-              },*/
-            }],
-            "react",
-          ],
-          // transform-runtime required for things like Object.assign() for browsers that don't support that.
-          // rest-spread transform required for "valuelink"" module
-          plugins: [
-            "transform-object-assign",
-            "transform-object-rest-spread",
-            "transform-class-properties",
-          ],
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [
+              ["env", {
+                useBuiltIns: true,
+                targets: {
+                  "ie": "11",
+                },
+                debug: true,
+              }],
+              "react",
+            ],
+            // transform-runtime required for things like Object.assign() for browsers that don't support that.
+            // rest-spread transform required for "valuelink"" module
+            plugins: [
+              "transform-object-assign",
+              "transform-object-rest-spread",
+              "transform-class-properties",
+            ],
+          },
         },
       },
       {
