@@ -9,6 +9,7 @@ import Highlighted from "../requestbodies/Highlighted";
 import URLParameters from "../requestbodies/URLParameters";
 import SendData from "../requestbodies/SendData";
 import DataURL from "../requestbodies/DataURL";
+import JSON from "../requestbodies/JSON";
 
 const responseBodyComponents = {
   Headers: {
@@ -41,6 +42,11 @@ const responseBodyComponents = {
     Component: DataURL,
     id: "DataURL",
     label: Strings.DataURL,
+  },
+  JSON: {
+    Component: JSON,
+    id: "JSON",
+    label: Strings.JSON,
   },
 };
 
