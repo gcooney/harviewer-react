@@ -1,23 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
 
-export default createReactClass({
-  displayName: "InfoTip",
-
-  propTypes: {
-    children: PropTypes.node,
-    onRef: PropTypes.func,
-    infoTipMargin: PropTypes.number,
-    infoTipWindowPadding: PropTypes.number,
-  },
-
-  getInitialState() {
-    return {
+class InfoTip extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       active: false,
       multiline: false,
     };
-  },
+    this.domRef = React.createRef();
+  }
 
   placeInfoTip(infoTip, x, y) {
     const { infoTipMargin, infoTipWindowPadding } = this.props;
@@ -50,41 +42,47 @@ export default createReactClass({
     infoTip.style.left = style.left;
     infoTip.style.right = style.right;
     infoTip.style.bottom = style.bottom;
-
-    console.log(style);
-    console.log(infoTip.style);
-  },
+  }
 
   refresh(props, state) {
     const { active, multiline, x, y } = state;
-    this.setActiveAttr(this.infoTip, active, multiline);
+    this.setActiveAttr(this.domRef.current, active, multiline);
     if (active) {
-      this.placeInfoTip(this.infoTip, x, y);
+      this.placeInfoTip(this.domRef.current, x, y);
     }
-  },
+  }
 
   setActiveAttr(ref, active, multiline) {
     ref.setAttribute("active", active);
     // There is no background image for mulitline tooltips.
     ref.setAttribute("multiline", multiline);
-  },
+  }
 
   componentDidMount() {
     this.refresh(this.props, this.state);
     if (this.props.onRef) {
-      this.props.onRef(this.infoTip);
+      this.props.onRef(this.domRef.current);
     }
-  },
+  }
 
   UNSAFE_componentWillUpdate(nextProps, nextState) {
     this.refresh(nextProps, nextState);
-  },
+  }
 
   render() {
     return (
-      <div className="infoTip" ref={(ref) => this.infoTip = ref}>
+      <div className="infoTip" ref={this.domRef}>
         {this.props.children}
       </div>
     );
-  },
-});
+  }
+}
+
+InfoTip.propTypes = {
+  children: PropTypes.node,
+  onRef: PropTypes.func,
+  infoTipMargin: PropTypes.number,
+  infoTipWindowPadding: PropTypes.number,
+};
+
+export default InfoTip;
