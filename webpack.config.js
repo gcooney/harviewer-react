@@ -18,12 +18,13 @@ module.exports = {
   mode: "development",
   //context: path.join(__dirname, "webapp"),
   entry: {
+    // polyfill required by (at least) IE11
     main: [
-      //"babel-polyfill",
+      "babel-polyfill",
       "./webapp/main.js",
     ],
     demo: [
-      //"babel-polyfill",
+      "babel-polyfill",
       "./webapp/demo.js",
     ],
   },
@@ -83,5 +84,12 @@ module.exports = {
         loader: "url-loader?limit=8192",
       },
     ],
+  },
+  devServer: {
+    // Until all the test resources are part of the harviewer-react project,
+    // use the original harviewer resources via proxy.
+    proxy: {
+      "/selenium": "http://harviewer.lan:49001",
+    },
   },
 };

@@ -10,6 +10,8 @@ import URLParameters from "../requestbodies/URLParameters";
 import SendData from "../requestbodies/SendData";
 import DataURL from "../requestbodies/DataURL";
 import JSON from "../requestbodies/JSON";
+import ExternalImage from "../requestbodies/ExternalImage";
+import Image from "../requestbodies/Image";
 
 const responseBodyComponents = {
   Headers: {
@@ -47,6 +49,16 @@ const responseBodyComponents = {
     Component: JSON,
     id: "JSON",
     label: Strings.JSON,
+  },
+  Image: {
+    Component: Image,
+    id: "Image",
+    label: Strings.Image,
+  },
+  ExternalImage: {
+    Component: ExternalImage,
+    id: "ExternalImage",
+    label: Strings.ExternalImage,
   },
 };
 
