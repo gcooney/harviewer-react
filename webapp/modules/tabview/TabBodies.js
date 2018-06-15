@@ -1,17 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
+
 import TabBody from "./TabBody";
 
-export default createReactClass({
-  displayName: "tabview/TabBodies",
-
-  propTypes: {
-    id: PropTypes.string,
-    selectedTabIdx: PropTypes.number,
-    tabs: PropTypes.array,
-  },
-
+class TabBodies extends React.Component {
   render() {
     const { id, tabs, selectedTabIdx } = this.props;
     const tabBodies = tabs.map((tab, i) => {
@@ -24,5 +16,13 @@ export default createReactClass({
         {tabBodies}
       </div>
     );
-  },
-});
+  }
+}
+
+TabBodies.propTypes = {
+  id: PropTypes.string,
+  selectedTabIdx: PropTypes.number,
+  tabs: PropTypes.array,
+};
+
+export default TabBodies;

@@ -4,12 +4,11 @@ import { saveAs } from "file-saver";
 
 import setState from "../setState";
 import Stats from "../Stats";
-import NetTable from "../nettable/NetTable";
 import PageTimeline from "../pagetimeline/PageTimeline";
-import PageTable from "../pagetable/PageTable";
 import PreviewTabToolbar from "./PreviewTabToolbar";
+import PreviewList from "./preview/PreviewList";
 
-export default class PreviewTab extends React.Component {
+class PreviewTab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -105,22 +104,7 @@ export default class PreviewTab extends React.Component {
         <div className="previewStats">
           {this.state.statsVisible ? <Stats /> : ""}
         </div>
-        <div className="previewList">
-          {
-            harModels.map((model, i) => {
-              const pageTable = <PageTable key={"PageTable" + i} model={model} />;
-
-              // If there are pageless entries in the HAR, show them in a standalone NetTable
-              const pagelessEntries = this.findPagelessEntries(model.input);
-              if (pagelessEntries && pagelessEntries.length > 0) {
-                const netTable = <NetTable key={"NetTable" + i} model={model} entries={pagelessEntries} />;
-                return [netTable, pageTable];
-              }
-
-              return pageTable;
-            })
-          }
-        </div>
+        <PreviewList harModels={harModels} />
       </div>
     );
   }
@@ -129,3 +113,5 @@ export default class PreviewTab extends React.Component {
 PreviewTab.propTypes = {
   harModels: PropTypes.array,
 };
+
+export default PreviewTab;

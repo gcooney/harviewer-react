@@ -2,4 +2,7 @@ import React from "react";
 import { render } from "react-dom";
 import App from "./modules/App";
 
-render(<App />, document.getElementById("content"));
+const mode = (window.location.href.split("?")[0].endsWith("preview.html")) ?
+  "preview" :
+  "";
+render(<App mode={mode} />, document.getElementById("content"));

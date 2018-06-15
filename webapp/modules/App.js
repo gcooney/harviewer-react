@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import HarModel from "./preview/harModel";
 import Loader from "./preview/harModelLoader";
@@ -16,8 +17,9 @@ import TabView from "./tabview/TabView";
 import AboutTab from "./tabs/AboutTab";
 import HomeTab from "./tabs/HomeTab";
 import PreviewTab from "./tabs/PreviewTab";
+import PreviewList from "./tabs/preview/PreviewList";
 
-export default class App extends React.Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -109,15 +111,25 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { selectedTabIdx } = this.state;
+    const { selectedTabIdx, harModels } = this.state;
+    const { mode } = this.props;
 
-    const tabs = this.createTabs();
     return (
       <AppContext.Provider value={this.state}>
         <InfoTipHolder>
-          <TabView tabs={tabs} selectedTabIdx={selectedTabIdx} id="harView" />
+          {
+            (mode === "preview") ?
+              <PreviewList harModels={harModels} /> :
+              <TabView tabs={this.createTabs()} selectedTabIdx={selectedTabIdx} id="harView" />
+          }
         </InfoTipHolder>
       </AppContext.Provider>
     );
   }
 };
+
+App.propTypes = {
+  mode: PropTypes.string,
+};
+
+export default App;
