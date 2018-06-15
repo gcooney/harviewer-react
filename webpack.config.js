@@ -18,8 +18,14 @@ module.exports = {
   mode: "development",
   //context: path.join(__dirname, "webapp"),
   entry: {
-    main: ["babel-polyfill", "./webapp/main.js"],
-    demo: ["babel-polyfill", "./webapp/demo.js"],
+    main: [
+      //"babel-polyfill",
+      "./webapp/main.js",
+    ],
+    demo: [
+      //"babel-polyfill",
+      "./webapp/demo.js",
+    ],
   },
   output: {
     filename: "./webapp/[name].entry.js",
