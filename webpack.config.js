@@ -39,6 +39,17 @@ module.exports = {
       openAnalyzer: false,
     }),
   ],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendor",
+          chunks: "initial",
+        },
+      },
+    },
+  },
   module: {
     rules: [
       {
