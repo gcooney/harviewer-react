@@ -27,7 +27,7 @@ if (exec("git clone " + repo + " --branch gh-pages --single-branch " + ghTemp).c
 
 // Run the build and copy the built resources to staging
 
-if (exec("npm run webapp-build-prod").code !== 0) {
+if (exec("npm run build:prod").code !== 0) {
   echo("webpack build failed");
   exit(1);
 }
