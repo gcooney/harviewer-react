@@ -1,51 +1,48 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
 import { render, unmountComponentAtNode } from "react-dom";
 
 import * as Lib from "./core/lib";
-
 import InfoTip from "./InfoTip";
 
-const InfoTipHolder = createReactClass({
-  displayName: "",
+class InfoTipHolder extends React.Component {
+  listeners = [];
+  maxWidth = 100;
+  maxHeight = 80;
+  infoTipMargin = 10;
+  infoTipWindowPadding = 25;
 
-  propTypes: {
-    children: PropTypes.node,
-  },
-
-  listeners: [],
-  maxWidth: 100,
-  maxHeight: 80,
-  infoTipMargin: 10,
-  infoTipWindowPadding: 25,
+  constructor(props) {
+    super(props);
+    this.holder = React.createRef();
+    this.infoTip = React.createRef();
+  }
 
   getChildContext() {
     return {
       infoTipHolder: this,
     };
-  },
+  }
 
   componentDidMount() {
-    $(this.holder).on("mouseover", this.mousemove);
-    $(this.holder).on("mouseover", this.mouseout);
-    $(this.holder).on("mouseover", this.mousemove);
-  },
+    $(this.holder.current).on("mouseover", this.mousemove);
+    $(this.holder.current).on("mouseover", this.mouseout);
+    $(this.holder.current).on("mouseover", this.mousemove);
+  }
 
   componentWillUnmount() {
-    $(this.holder).off("mouseover", this.mousemove);
-    $(this.holder).off("mouseover", this.mouseout);
-    $(this.holder).off("mouseover", this.mousemove);
-  },
+    $(this.holder.current).off("mouseover", this.mousemove);
+    $(this.holder.current).off("mouseover", this.mouseout);
+    $(this.holder.current).off("mouseover", this.mousemove);
+  }
 
   setInfoTipState(state) {
     if (this.infoTip) {
-      // console.log("setInfoTipState", state);
-      this.infoTip.setState(state);
+      this.infoTip.current.setState(state);
     }
-  },
+  }
 
-  showInfoTip(infoTip, target, x, y, rangeParent, rangeOffset) {
+  showInfoTip = (infoTip, target, x, y, rangeParent, rangeOffset) => {
     const scrollParent = Lib.getOverflowParent(target);
     const scrollX = x + (scrollParent ? scrollParent.scrollLeft : 0);
 
@@ -71,45 +68,48 @@ const InfoTipHolder = createReactClass({
         y,
       });
     }
-  },
+  }
 
-  onInfoTipRef(ref) {
-    console.log("onInfoTipRef", ref);
+  onInfoTipRef = (ref) => {
     this.infoTipDom = ref;
-  },
+  }
 
   addListener(listener) {
     this.listeners.push(listener);
-  },
+  }
 
   removeListener(listener) {
     Lib.remove(this.listeners, listener);
-  },
+  }
 
-  mousemove(e) {
+  mousemove = (e) => {
     const x = e.clientX;
     const y = e.clientY;
     this.showInfoTip(this.infoTipDom, e.target, x, y, e.rangeParent, e.rangeOffset);
-  },
+  }
 
-  mouseout(e) {
+  mouseout = (e) => {
     if (!e.relatedTarget) {
       this.setInfoTipState({
         active: false,
       });
     }
-  },
+  }
 
   render() {
     const { infoTipMargin, infoTipWindowPadding } = this;
     return (
-      <div ref={(ref) => this.holder = ref}>
+      <div ref={this.holder}>
         {this.props.children}
-        <InfoTip ref={(ref) => this.infoTip = ref} onRef={this.onInfoTipRef} infoTipMargin={infoTipMargin} infoTipWindowPadding={infoTipWindowPadding} />
+        <InfoTip ref={this.infoTip} onRef={this.onInfoTipRef} infoTipMargin={infoTipMargin} infoTipWindowPadding={infoTipWindowPadding} />
       </div>
     );
-  },
-});
+  }
+}
+
+InfoTipHolder.propTypes = {
+  children: PropTypes.node,
+};
 
 InfoTipHolder.childContextTypes = {
   infoTipHolder: PropTypes.object,
