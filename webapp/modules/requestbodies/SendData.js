@@ -29,7 +29,6 @@ class SendData extends React.Component {
       // TODO
       content = postData.text;
     }
-    console.log(content);
     return (
       <div className="netInfoPostText netInfoText">
         {content}
