@@ -19,11 +19,14 @@ import HomeTab from "./tabs/HomeTab";
 import PreviewTab from "./tabs/PreviewTab";
 import PreviewList from "./tabs/preview/PreviewList";
 
+const PREVIEW_TAB_INDEX = 1;
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       harModels: [],
+      errors: [],
       previewCols: "url status size timeline",
       selectedTabIdx: 0,
       appendPreview: this.appendPreview,
@@ -46,7 +49,7 @@ class App extends React.Component {
   }
 
   createTabs() {
-    const { harModels } = this.state;
+    const { harModels, errors } = this.state;
 
     let harViewerExampleApp = window.location.href.split("?")[0];
     if (!harViewerExampleApp.endsWith("/")) {
@@ -62,7 +65,7 @@ class App extends React.Component {
       {
         id: "Preview",
         label: previewTabStrings.previewTabLabel,
-        body: <PreviewTab harModels={harModels} />,
+        body: <PreviewTab harModels={harModels} errors={errors} />,
       },
       {
         id: "DOM",
@@ -72,7 +75,7 @@ class App extends React.Component {
       {
         id: "Schema",
         label: harViewerStrings.schemaTabLabel,
-      }
+      },
     ];
 
     return tabs;
@@ -84,14 +87,23 @@ class App extends React.Component {
   }
 
   appendPreview = (harObjectOrString) => {
-    const { harModels } = this.state;
-    const model = new HarModel();
-    const har = (typeof harObjectOrString === "string") ? JSON.parse(harObjectOrString) : harObjectOrString;
-    model.append(har);
-    setState(this, {
-      harModels: harModels.concat([model]),
-      selectedTabIdx: 1,
-    });
+    // TODO - get validate from checkbox/cookie value
+    const { harModels, errors, validate } = this.state;
+
+    try {
+      const model = new HarModel();
+      const har = (typeof harObjectOrString === "string") ? HarModel.parse(harObjectOrString, validate) : harObjectOrString;
+      model.append(har);
+      setState(this, {
+        harModels: harModels.concat([model]),
+        selectedTabIdx: PREVIEW_TAB_INDEX,
+      });
+    } catch (err) {
+      setState(this, {
+        errors: errors.concat(err),
+        selectedTabIdx: PREVIEW_TAB_INDEX,
+      });
+    }
   }
 
   componentDidMount() {
@@ -106,12 +118,11 @@ class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(prevProps, prevState);
     this.updatePreviewCols();
   }
 
   render() {
-    const { selectedTabIdx, harModels } = this.state;
+    const { selectedTabIdx, harModels, errors } = this.state;
     const { mode } = this.props;
 
     return (
@@ -119,7 +130,7 @@ class App extends React.Component {
         <InfoTipHolder>
           {
             (mode === "preview") ?
-              <PreviewList harModels={harModels} /> :
+              <PreviewList harModels={harModels} errors={errors} /> :
               <TabView tabs={this.createTabs()} selectedTabIdx={selectedTabIdx} id="harView" />
           }
         </InfoTipHolder>

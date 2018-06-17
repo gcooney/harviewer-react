@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import ValidationError from "./ValidationError";
 import NetTable from "../../nettable/NetTable";
 import PageTable from "../../pagetable/PageTable";
 
@@ -36,7 +37,7 @@ class PreviewList extends React.Component {
   }
 
   render() {
-    const { harModels } = this.props;
+    const { harModels, errors } = this.props;
 
     return (
       <div className="previewList">
@@ -54,6 +55,10 @@ class PreviewList extends React.Component {
             return pageTable;
           })
         }
+        {
+          (errors || []).map((error, i) => <ValidationError key={i} error={error} />)
+        }
+
       </div>
     );
   }
@@ -61,6 +66,7 @@ class PreviewList extends React.Component {
 
 PreviewList.propTypes = {
   harModels: PropTypes.array,
+  errors: PropTypes.array,
 };
 
 export default PreviewList;

@@ -79,7 +79,7 @@ class PreviewTab extends React.Component {
   }
 
   render() {
-    const { harModels } = this.props;
+    const { harModels, errors } = this.props;
 
     if (!harModels) {
       return <div></div>;
@@ -104,7 +104,7 @@ class PreviewTab extends React.Component {
         <div className="previewStats">
           {this.state.statsVisible ? <Stats /> : ""}
         </div>
-        <PreviewList harModels={harModels} />
+        <PreviewList harModels={harModels} errors={errors} />
       </div>
     );
   }
@@ -112,6 +112,7 @@ class PreviewTab extends React.Component {
 
 PreviewTab.propTypes = {
   harModels: PropTypes.array,
+  errors: PropTypes.array,
 };
 
 export default PreviewTab;
