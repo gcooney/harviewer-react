@@ -60,11 +60,14 @@ export class HomeTab extends React.Component {
 };
 
 HomeTab.propTypes = {
+  appendPreview: PropTypes.func,
   requestTabChange: PropTypes.func,
 };
 
-export default (props) => (
+const WrappedHomeTab = (props) => (
   <AppContext.Consumer>
     {({ appendPreview }) => <HomeTab {...props} appendPreview={appendPreview} />}
   </AppContext.Consumer>
 );
+
+export default WrappedHomeTab;
