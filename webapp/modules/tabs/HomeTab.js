@@ -41,7 +41,7 @@ export class HomeTab extends React.Component {
   }
 
   onPreviewClick = (e) => {
-    const json = $("#sourceEditor").val();
+    const json = document.getElementById("sourceEditor").value;
     const { appendPreview } = this.props;
     appendPreview(json);
   }

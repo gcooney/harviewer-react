@@ -25,15 +25,15 @@ class InfoTipHolder extends React.Component {
   }
 
   componentDidMount() {
-    $(this.holder.current).on("mouseover", this.mousemove);
-    $(this.holder.current).on("mouseover", this.mouseout);
-    $(this.holder.current).on("mouseover", this.mousemove);
+    this.holder.current.addEventListener("mouseover", this.mousemove, false);
+    this.holder.current.addEventListener("mouseover", this.mouseout, false);
+    this.holder.current.addEventListener("mouseover", this.mousemove, false);
   }
 
   componentWillUnmount() {
-    $(this.holder.current).off("mouseover", this.mousemove);
-    $(this.holder.current).off("mouseover", this.mouseout);
-    $(this.holder.current).off("mouseover", this.mousemove);
+    this.holder.current.removeEventListener("mouseover", this.mousemove, false);
+    this.holder.current.removeEventListener("mouseover", this.mouseout, false);
+    this.holder.current.removeEventListener("mouseover", this.mousemove, false);
   }
 
   setInfoTipState(state) {
