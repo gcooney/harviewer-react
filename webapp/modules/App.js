@@ -18,6 +18,7 @@ import AboutTab from "./tabs/AboutTab";
 import HomeTab from "./tabs/HomeTab";
 import PreviewTab from "./tabs/PreviewTab";
 import PreviewList from "./tabs/preview/PreviewList";
+import SchemaTab from "./tabs/SchemaTab";
 
 const PREVIEW_TAB_INDEX = 1;
 
@@ -75,6 +76,7 @@ class App extends React.Component {
       {
         id: "Schema",
         label: harViewerStrings.schemaTabLabel,
+        body: <SchemaTab />,
       },
     ];
 

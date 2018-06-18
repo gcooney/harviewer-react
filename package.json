@@ -69,6 +69,7 @@
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-router": "^4.3.1",
-    "valuelink": "^1.5.5"
+    "valuelink": "^1.5.5",
+    "whatwg-fetch": "^2.0.4"
   }
 }

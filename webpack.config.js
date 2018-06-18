@@ -21,10 +21,12 @@ module.exports = {
     // polyfill required by (at least) IE11
     main: [
       "babel-polyfill",
+      "whatwg-fetch",
       "./webapp/main.js",
     ],
     demo: [
       "babel-polyfill",
+      "whatwg-fetch",
       "./webapp/demo.js",
     ],
   },
