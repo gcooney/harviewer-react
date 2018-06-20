@@ -37,6 +37,11 @@ class NetModel {
   }
 
   calculateFileTimes(file, phaseStartTime, phaseElapsed) {
+    const timings = file.timings;
+    if (!timings) {
+      return null;
+    }
+
     // Individual phases of a request:
     //
     // 1) Blocking          HTTP-ON-MODIFY-REQUEST -> (STATUS_RESOLVING || STATUS_CONNECTING_TO)
@@ -55,12 +60,12 @@ class NetModel {
     // HTTP-ON-MODIFY-REQUEST -> HTTP-ON-EXAMINE-CACHED-RESPONSE
 
     // Compute end of each phase since the request start.
-    const blocking = ((file.timings.blocked < 0) ? 0 : file.timings.blocked);
-    const resolving = blocking + ((file.timings.dns < 0) ? 0 : file.timings.dns);
-    const connecting = resolving + ((file.timings.connect < 0) ? 0 : file.timings.connect);
-    const sending = connecting + ((file.timings.send < 0) ? 0 : file.timings.send);
-    const waiting = sending + ((file.timings.wait < 0) ? 0 : file.timings.wait);
-    const receiving = waiting + ((file.timings.receive < 0) ? 0 : file.timings.receive);
+    const blocking = ((timings.blocked < 0) ? 0 : timings.blocked);
+    const resolving = blocking + ((timings.dns < 0) ? 0 : timings.dns);
+    const connecting = resolving + ((timings.connect < 0) ? 0 : timings.connect);
+    const sending = connecting + ((timings.send < 0) ? 0 : timings.send);
+    const waiting = sending + ((timings.wait < 0) ? 0 : timings.wait);
+    const receiving = waiting + ((timings.receive < 0) ? 0 : timings.receive);
 
     const startedDateTime = Date_.parseISO8601(file.startedDateTime);
 
@@ -203,7 +208,8 @@ const NetTable = createReactClass({
     // Use concat to flatten an array of arrays to a flat array.
     return [].concat(entries.map((entry, i) => {
       const opened = netRowExpandedState[i];
-      const bars = createBars(entry, m.calculateFileTimes(entry, phaseStartTime, phaseElapsed));
+      const fileTimes = m.calculateFileTimes(entry, phaseStartTime, phaseElapsed);
+      const bars = fileTimes ? createBars(entry, fileTimes) : null;
 
       const netRow = <NetRow key={"NetRow" + i} page={page} phase={phase}
         entry={entry} entryId={i} opened={opened} bars={bars}
