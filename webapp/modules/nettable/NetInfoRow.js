@@ -9,7 +9,8 @@ import Highlighted from "../requestbodies/Highlighted";
 import URLParameters from "../requestbodies/URLParameters";
 import SendData from "../requestbodies/SendData";
 import DataURL from "../requestbodies/DataURL";
-import JSON from "../requestbodies/JSON";
+import JSONTree from "../requestbodies/JSONTree";
+import XMLTree from "../requestbodies/XMLTree";
 import ExternalImage from "../requestbodies/ExternalImage";
 import Image from "../requestbodies/Image";
 
@@ -46,9 +47,14 @@ const responseBodyComponents = {
     label: Strings.DataURL,
   },
   JSON: {
-    Component: JSON,
+    Component: JSONTree,
     id: "JSON",
     label: Strings.JSON,
+  },
+  XML: {
+    Component: XMLTree,
+    id: "XML",
+    label: Strings.XML,
   },
   Image: {
     Component: Image,

@@ -37,7 +37,7 @@ import Toolbar from "./toolbar/Toolbar";
 
 import TimeInfoTip from "./timeinfotip/TimeInfoTip";
 
-import DomTree from "./domtree/DomTree";
+import JSONTree from "./requestbodies/JSONTree";
 
 const components = Object.assign({
   React,
@@ -63,7 +63,7 @@ const components = Object.assign({
   PlainResponse,
   Toolbar,
   TimeInfoTip,
-  DomTree,
+  JSONTree,
 });
 
 /**
@@ -96,7 +96,7 @@ const TableDemoContainer = (props) => {
 const RequestBodyContainer = (props) => {
   return (
     <div className="netTable">
-      <TabBody { ...props }>{props.children}</TabBody>
+      <TabBody {...props}>{props.children}</TabBody>
     </div>
   );
 };
@@ -124,10 +124,10 @@ const demos = [
   "PageTable",
   "NetTable",
   newDemo("NetRow", null, (demo, demoProps) =>
-    <TableDemoContainer demo={demo}><NetRow { ...demoProps } /></TableDemoContainer>
+    <TableDemoContainer demo={demo}><NetRow {...demoProps} /></TableDemoContainer>
   ),
   newDemo("NetSummaryRow", null, (demo, demoProps) =>
-    <TableDemoContainer demo={demo}><NetSummaryRow { ...demoProps } /></TableDemoContainer>
+    <TableDemoContainer demo={demo}><NetSummaryRow {...demoProps} /></TableDemoContainer>
   ),
   "InfoTip",
   "PageTimeline",
@@ -137,27 +137,27 @@ const demos = [
   "TrafficPie",
   "CachePie",
   newDemo("TabView", (demo, commonProps) => ({
-    tabs: [1, 2, 3].map(id => ({
+    tabs: [1, 2, 3].map((id) => ({
       id: id,
       label: "Tab " + id,
-      body: <div>Body {id}</div>
-    }))
+      body: <div>Body {id}</div>,
+    })),
   })),
   newDemo("Headers", null, (demo, demoProps) =>
-    <RequestBodyContainer id="Headers" selected={true}><Headers { ...demoProps } /></RequestBodyContainer>
+    <RequestBodyContainer id="Headers" selected={true}><Headers {...demoProps} /></RequestBodyContainer>
   ),
   newDemo("PlainResponse", null, (demo, demoProps) =>
-    <RequestBodyContainer id="Response" selected={true}><PlainResponse { ...demoProps } /></RequestBodyContainer>
+    <RequestBodyContainer id="Response" selected={true}><PlainResponse {...demoProps} /></RequestBodyContainer>
   ),
   newDemo("Highlighted", null, (demo, demoProps) =>
-    <RequestBodyContainer id="Response" selected={true}><Highlighted { ...demoProps } /></RequestBodyContainer>
+    <RequestBodyContainer id="Response" selected={true}><Highlighted {...demoProps} /></RequestBodyContainer>
   ),
   "Toolbar",
   newDemo("TimeInfoTip", null, (demo, demoProps) => {
     const { entries } = demoProps;
     const children = entries.slice(0, 3).map((entry, i) => (
       <div key={i} style={{ display: "inline-block" }}>
-        <InfoTipContainer fixedPosition="false"><TimeInfoTip { ...demoProps } entry={entry} /></InfoTipContainer>
+        <InfoTipContainer fixedPosition="false"><TimeInfoTip {...demoProps} entry={entry} /></InfoTipContainer>
       </div>
     ));
     return (
@@ -166,8 +166,16 @@ const demos = [
       </div>
     );
   }),
-  newDemo("DomTree", null, (demo, demoProps) =>
-    <div className="tabDOMBody"><DomTree { ...demoProps } /></div>
+  newDemo("JSONTree", (demo, commonProps) => ({
+    entry: {
+      response: {
+        content: {
+          text: JSON.stringify(commonProps.input),
+        },
+      },
+    },
+  }), (demo, demoProps) =>
+      <div className="tabDOMBody"><JSONTree {...demoProps} /></div>
   )
 ].reduce(function(map, demo) {
   if (typeof demo === "string") {
@@ -230,20 +238,18 @@ export default createReactClass({
   createDemoContainer(demo, demoProps) {
     let demoContainer = null;
 
+    const componentProps = demo.propsGenerator ? demo.propsGenerator(demo, demoProps) : {};
+    const props = Object.assign({}, demoProps, componentProps);
+
     if (demo.customContainerGenerator) {
       // Use the customContainerGenerator to generate the React component that demo will be
       // inserted into.
-      demoContainer = demo.customContainerGenerator(demo, demoProps);
+      demoContainer = demo.customContainerGenerator(demo, props);
     } else {
-      const componentProps = demo.propsGenerator ? demo.propsGenerator(demo, demoProps) : {};
-      const props = Object.assign({}, demoProps, componentProps);
-      const demoComponent = React.createElement(components[demo.componentName], props);
-      demoContainer = demoComponent;
+      demoContainer = React.createElement(components[demo.componentName], props);
     }
 
-    demoContainer = <DemoContainer demo={demo}>{demoContainer}</DemoContainer>;
-
-    return demoContainer;
+    return <DemoContainer demo={demo}>{demoContainer}</DemoContainer>;
   },
 
   renderDemoLinks() {
@@ -252,7 +258,7 @@ export default createReactClass({
       <div>
         <div>The Demo Shell uses a "demo" query parameter to load a component.</div>
         <div>HAR URL: <Input type="text" size="64" valueLink={linked.harUrl} /></div>
-        <DemoLinks { ...this.props } demos={demos} />
+        <DemoLinks {...this.props} demos={demos} />
       </div>
     );
   },

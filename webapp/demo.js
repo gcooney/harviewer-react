@@ -19,7 +19,7 @@ window.addEventListener("load", function() {
   }
 
   function createDemoProps(har) {
-    var model = new HarModel();
+    const model = new HarModel();
     model.append(har);
     const firstPage = har.log.pages[0];
     const firstPageEntries = model.getPageEntries(firstPage);
@@ -30,15 +30,15 @@ window.addEventListener("load", function() {
       page: firstPage,
       entries: firstPageEntries,
       entry: firstEntryOfFirstPage,
-      visible: true
+      visible: true,
     };
   }
 
   // eslint-disable-next-line
-  var uri = URI(window.location.href);
-  var params = uri.query(true);
+  const uri = URI(window.location.href);
+  const params = uri.query(true);
   if (params.demo) {
-    loadHar(null, har => renderDemo(params.demo, createDemoProps(har)));
+    loadHar(null, (har) => renderDemo(params.demo, createDemoProps(har)));
   } else {
     renderDemo();
   }
