@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import * as Url from "./core/url";
 import HarModel from "./preview/harModel";
 import Loader from "./preview/harModelLoader";
 
@@ -31,6 +32,7 @@ class App extends React.Component {
       previewCols: "url status size timeline",
       selectedTabIdx: 0,
       appendPreview: this.appendPreview,
+      validate: true,
     };
   }
 
@@ -90,11 +92,21 @@ class App extends React.Component {
 
   appendPreview = (harObjectOrString) => {
     // TODO - get validate from checkbox/cookie value
-    const { harModels, errors, validate } = this.state;
+    const { harModels, errors } = this.state;
+
+    // TODO - don't go poking in the URL. Get the loader to pass back whether we should validate based on URL.
+    let { validate } = this.state;
+    const { mode } = this.props;
+    const isPreview = (mode === "preview");
+    if (isPreview) {
+      if (Url.getURLParameter("validate") === "false") {
+        validate = false;
+      }
+    }
 
     try {
       const model = new HarModel();
-      const har = (typeof harObjectOrString === "string") ? HarModel.parse(harObjectOrString, validate) : harObjectOrString;
+      const har = HarModel.parse(harObjectOrString, validate);
       model.append(har);
       setState(this, {
         harModels: harModels.concat([model]),
