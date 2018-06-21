@@ -17,7 +17,7 @@ class PreviewTab extends React.Component {
     };
   }
 
-  onDownloadClick(e) {
+  onDownloadClick = (e) => {
     e.preventDefault();
     // TODO find out which model to copy.
     const { harModels } = this.props;
@@ -27,21 +27,21 @@ class PreviewTab extends React.Component {
     saveAs(blob, "netData.har");
   }
 
-  onStatsClick(e) {
+  onStatsClick = (e) => {
     e.preventDefault();
     setState(this, {
       statsVisible: !this.state.statsVisible,
     });
   }
 
-  onTimelineClick(e) {
+  onTimelineClick = (e) => {
     e.preventDefault();
     setState(this, {
       timelineVisible: !this.state.timelineVisible,
     });
   }
 
-  onClearClick(e) {
+  onClearClick = (e) => {
     e.preventDefault();
     const href = window.location.href;
     const index = href.indexOf("?");
@@ -85,6 +85,8 @@ class PreviewTab extends React.Component {
       return <div></div>;
     }
 
+    // TODO - how to choose which model?
+    const model = harModels[0];
     const page = null;
     const clickHandlers = {
       onStatsClick: this.onStatsClick,
