@@ -18,6 +18,7 @@ import TabView from "./tabview/TabView";
 import AboutTab from "./tabs/AboutTab";
 import HomeTab from "./tabs/HomeTab";
 import PreviewTab from "./tabs/PreviewTab";
+import DOMTab from "./tabs/dom/DOMTab";
 import PreviewList from "./tabs/preview/PreviewList";
 import SchemaTab from "./tabs/SchemaTab";
 
@@ -73,6 +74,7 @@ class App extends React.Component {
       {
         id: "DOM",
         label: domTabStrings.domTabLabel,
+        body: <DOMTab />,
       },
       this.createAboutTab(harViewerExampleApp),
       {

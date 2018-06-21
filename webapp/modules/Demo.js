@@ -1,5 +1,4 @@
 import React from "react";
-import createReactClass from "create-react-class";
 import Link from "valuelink";
 import { Input } from "valuelink/tags.jsx";
 
@@ -37,7 +36,7 @@ import Toolbar from "./toolbar/Toolbar";
 
 import TimeInfoTip from "./timeinfotip/TimeInfoTip";
 
-import JSONTree from "./requestbodies/JSONTree";
+import JSONEntryTree from "./requestbodies/JSONEntryTree";
 
 const components = Object.assign({
   React,
@@ -63,7 +62,7 @@ const components = Object.assign({
   PlainResponse,
   Toolbar,
   TimeInfoTip,
-  JSONTree,
+  JSONEntryTree,
 });
 
 /**
@@ -73,12 +72,13 @@ const components = Object.assign({
  *   An optional function that generates the extra props that the component needs.
  * @param {function} customContainerGenerator
  *   An optional function that generates the React component that demo will be inserted into.
+ * @return {object} demo info object
  */
 function newDemo(componentName, propsGenerator, customContainerGenerator) {
   return {
     componentName,
     propsGenerator,
-    customContainerGenerator
+    customContainerGenerator,
   };
 }
 
@@ -102,7 +102,7 @@ const RequestBodyContainer = (props) => {
 };
 
 const InfoTipContainer = (props) => {
-  const ref = ref => {
+  const ref = (ref) => {
     ref.setAttribute("active", props.active || "true");
     ref.setAttribute("multiline", props.multiline || "true");
   };
@@ -166,7 +166,7 @@ const demos = [
       </div>
     );
   }),
-  newDemo("JSONTree", (demo, commonProps) => ({
+  newDemo("JSONEntryTree", (demo, commonProps) => ({
     entry: {
       response: {
         content: {
@@ -174,9 +174,7 @@ const demos = [
         },
       },
     },
-  }), (demo, demoProps) =>
-      <div className="tabDOMBody"><JSONTree {...demoProps} /></div>
-  )
+  }), (demo, demoProps) => <div className="tabDOMBody"><JSONEntryTree {...demoProps} /></div>),
 ].reduce(function(map, demo) {
   if (typeof demo === "string") {
     demo = newDemo(demo);
@@ -187,14 +185,14 @@ const demos = [
 
 // demo impl
 
-const DemoContainer = createReactClass({
-  updatePreviewCols(ref) {
+class DemoContainer extends React.Component {
+  updatePreviewCols = (ref) => {
     // HACK!
     // Work out how to do this properly.
     // React throws an Unknown Prop Warning if we try and set "previewCols" attr on React component.
     // https://facebook.github.io/react/warnings/unknown-prop.html
     ref.setAttribute("previewCols", "url status domain size timeline type");
-  },
+  }
 
   render() {
     const { demo } = this.props;
@@ -209,16 +207,17 @@ const DemoContainer = createReactClass({
       </InfoTipHolder>
     );
   }
-});
+}
 
-const DemoLinks = createReactClass({
-  demoToLink(demoKey) {
+class DemoLinks extends React.Component {
+  demoToLink = (demoKey) => {
     const demo = this.props.demos[demoKey];
     const href = "?demo=" + demo.componentName;
     return (
       <li key={demoKey}><a href={href}>{demo.componentName}</a></li>
     );
-  },
+  }
+
   render() {
     return (
       <ul>
@@ -226,14 +225,12 @@ const DemoLinks = createReactClass({
       </ul>
     );
   }
-});
+}
 
-export default createReactClass({
-  getInitialState() {
-    return {
-      harUrl: "../examples/softwareishard.com.har"
-    };
-  },
+export default class Demo extends React.Component {
+  state = {
+    harUrl: "../examples/softwareishard.com.har"
+  }
 
   createDemoContainer(demo, demoProps) {
     let demoContainer = null;
@@ -250,7 +247,7 @@ export default createReactClass({
     }
 
     return <DemoContainer demo={demo}>{demoContainer}</DemoContainer>;
-  },
+  }
 
   renderDemoLinks() {
     const linked = Link.all(this, "harUrl");
@@ -261,7 +258,7 @@ export default createReactClass({
         <DemoLinks {...this.props} demos={demos} />
       </div>
     );
-  },
+  }
 
   render() {
     const { demoName, demoProps } = this.props;
@@ -273,4 +270,4 @@ export default createReactClass({
       </div>
     );
   }
-});
+}

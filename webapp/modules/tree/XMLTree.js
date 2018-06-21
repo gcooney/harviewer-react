@@ -2,8 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import Tree, { createUINode } from "./Tree";
-import { canDecode, decode } from "./decoder";
-import * as Mime from "../core/mime";
 
 function nodeChildElements(node, limit) {
   limit = ("number" === limit) ? limit : null;
@@ -68,22 +66,15 @@ function populateChildren(uiNode, level) {
   children.push(...elements);
 }
 
-function getRoot(entry) {
-  const { content } = entry.response;
-  const xmlStr = decode(content.text, content.encoding);
-  return $.parseXML(xmlStr);
-}
-
 class XMLTree extends React.Component {
   render() {
-    const { entry } = this.props;
-    const root = getRoot(entry);
+    const { root } = this.props;
     return <Tree root={root} hasChildren={hasChildren} populateChildren={populateChildren} />;
   }
 };
 
 XMLTree.propTypes = {
-  entry: PropTypes.object,
+  root: PropTypes.object,
 };
 
 XMLTree.isXmlMimeType = function(mimeType) {
