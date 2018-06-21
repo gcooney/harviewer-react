@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
 
 export const Button = (props) => {
   return (
@@ -8,8 +7,7 @@ export const Button = (props) => {
       ref={props.buttonRef}
       title={props.title}
       className="toolbarButton text"
-      onClick={props.command}
-      >
+      onClick={props.command}>
       {props.children}
     </span>
   );
@@ -22,17 +20,7 @@ Button.propTypes = {
   title: PropTypes.string,
 };
 
-export default createReactClass({
-  displayName: "",
-
-  propTypes: {
-    children: PropTypes.array,
-  },
-
-  createToolbarButton(title, text) {
-    const props = { title, text };
-    return <Button {...props} />;
-  },
+class Toolbar extends React.Component {
   createToolbarItems(children) {
     const style = { color: "gray" };
     return children.reduce((items, child, i) => {
@@ -43,13 +31,23 @@ export default createReactClass({
       items.push(child);
       return items;
     }, []);
-  },
+  }
 
   render() {
+    let { children } = this.props;
+    if (!Array.isArray(children)) {
+      children = [children];
+    }
     return (
       <div className="toolbar ">
-        {this.createToolbarItems(this.props.children || [])}
+        {this.createToolbarItems(children || [])}
       </div>
     );
   }
-});
+}
+
+Toolbar.propTypes = {
+  children: PropTypes.node,
+};
+
+export default Toolbar;
