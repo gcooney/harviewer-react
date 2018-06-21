@@ -3,7 +3,7 @@
 /**
  * @module core/StatsService
  */
-define("../core/StatsService", [
+define([
     "./lib",
     "../preview/harModel"
 ],
