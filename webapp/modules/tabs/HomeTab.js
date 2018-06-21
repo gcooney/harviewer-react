@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import Cookies from "../core/cookies";
-import Url from "../core/url";
 import AppContext from "../AppContext";
 import homeHtml from "raw-loader!./homeTab.html";
 
