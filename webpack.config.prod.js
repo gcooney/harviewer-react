@@ -1,6 +1,7 @@
-const config = require("./webpack.config");
+const configs = require("./webpack.config");
 
-config.mode = "production";
-config.output.filename = "./[name].entry.js";
+configs.forEach((config) => {
+  config.mode = "production";
+});
 
-module.exports = config;
+module.exports = configs;
