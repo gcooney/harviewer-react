@@ -17,6 +17,18 @@ class PreviewTab extends React.Component {
     };
   }
 
+  showStats() {
+    setState(this, {
+      statsVisible: !this.state.statsVisible,
+    });
+  }
+
+  showTimeline() {
+    setState(this, {
+      timelineVisible: !this.state.timelineVisible,
+    });
+  }
+
   onDownloadClick = (e) => {
     e.preventDefault();
     // TODO find out which model to copy.
@@ -29,16 +41,12 @@ class PreviewTab extends React.Component {
 
   onStatsClick = (e) => {
     e.preventDefault();
-    setState(this, {
-      statsVisible: !this.state.statsVisible,
-    });
+    this.showStats();
   }
 
   onTimelineClick = (e) => {
     e.preventDefault();
-    setState(this, {
-      timelineVisible: !this.state.timelineVisible,
-    });
+    this.showTimeline();
   }
 
   onClearClick = (e) => {

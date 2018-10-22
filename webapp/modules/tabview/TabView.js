@@ -8,8 +8,12 @@ import TabBodies from "./TabBodies";
 class TabView extends React.Component {
   constructor(props) {
     super(props);
+
+    this.tabBodies = React.createRef();
+
+    const { selectedTabIdx } = this.props;
     this.state = {
-      selectedTabIdx: this.props.selectedTabIdx || 0,
+      selectedTabIdx: selectedTabIdx || 0,
     };
   }
 
@@ -25,6 +29,10 @@ class TabView extends React.Component {
     setState(this, {
       selectedTabIdx: tabIdx,
     });
+  }
+
+  getTab(name) {
+    return this.tabBodies.current.getTab(name);
   }
 
   render() {
@@ -43,7 +51,7 @@ class TabView extends React.Component {
             <td style={{ verticalAlign: "top" }} className="tabViewCol">
               <div className="tabViewBody">
                 <TabBar id={id} tabs={tabs} selectedTabIdx={selectedTabIdx} onSelectTab={this.onSelectTab} />
-                <TabBodies id={id} tabs={tabs} selectedTabIdx={selectedTabIdx} />
+                <TabBodies ref={this.tabBodies} id={id} tabs={tabs} selectedTabIdx={selectedTabIdx} />
               </div>
             </td>
           </tr>

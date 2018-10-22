@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import * as Events from "./core/events";
 import * as Url from "./core/url";
 import HarModel from "./preview/harModel";
 import Loader from "./preview/harModelLoader";
@@ -27,6 +28,9 @@ const PREVIEW_TAB_INDEX = 1;
 class App extends React.Component {
   constructor(props) {
     super(props);
+
+    this.tabView = React.createRef();
+
     this.state = {
       harModels: [],
       errors: [],
@@ -88,8 +92,27 @@ class App extends React.Component {
   }
 
   updatePreviewCols() {
-    const content = document.getElementById("content");
-    content.setAttribute("previewCols", this.state.previewCols);
+    const { container } = this.props;
+    container.setAttribute("previewCols", this.state.previewCols);
+  }
+
+  loadHar(url, settings) {
+    settings = settings || {};
+    return Loader.load(this, url,
+      settings.jsonp,
+      settings.jsonpCallback,
+      settings.success,
+      settings.ajaxError);
+  }
+
+  loadArchives(hars, harps, callbackName, callback, errorCallback, doneCallback) {
+    const self = this;
+    return Loader.loadArchives(hars, harps, callbackName, function(jsonString) {
+      self.appendPreview(jsonString);
+      if (callback) {
+        callback.apply(this, arguments);
+      }
+    }, errorCallback, doneCallback);
   }
 
   appendPreview = (harObjectOrString) => {
@@ -123,6 +146,11 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    const { container } = this.props;
+    container.repObject = this;
+    Events.fireEvent(container, "onViewerPreInit");
+    Events.fireEvent(container, "onViewerInit");
+
     this.updatePreviewCols();
 
     Loader.run((response) => {
@@ -131,10 +159,16 @@ class App extends React.Component {
   }
 
   componentWillUnmount() {
+    const { container } = this.props;
+    container.repObject = null;
   }
 
   componentDidUpdate(prevProps, prevState) {
     this.updatePreviewCols();
+  }
+
+  getTab(name) {
+    return this.tabView.current.getTab(name);
   }
 
   render() {
@@ -147,7 +181,7 @@ class App extends React.Component {
           {
             (mode === "preview") ?
               <PreviewList harModels={harModels} errors={errors} /> :
-              <TabView tabs={this.createTabs()} selectedTabIdx={selectedTabIdx} id="harView" />
+              <TabView ref={this.tabView} tabs={this.createTabs()} selectedTabIdx={selectedTabIdx} id="harView" />
           }
         </InfoTipHolder>
       </AppContext.Provider>
