@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const TitleRow = (props) => {
   return (
-    <tr className={"netInfo" + props.titleType + "HeadersTitle"}>
+    <tr className={"netInfo" + props.titleType + "Title"}>
       <td colSpan="2"><div className="netInfoHeadersGroup ">{props.title}</div></td>
     </tr>
   );

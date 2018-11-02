@@ -8,18 +8,25 @@ class Headers extends React.Component {
   render() {
     const { entry } = this.props;
 
+    const responseHeaders = entry.response.headers || [];
+    const requestHeaders = entry.request.headers || [];
+
     return (
       <table cellPadding="0" cellSpacing="0" className="netInfoHeadersText netInfoText netInfoHeadersTable ">
         <tbody>
-          <TitleRow titleType="Response" title="Response Headers" />
+          <TitleRow titleType="ResponseVersion" title="Response Version" />
+          <ParamRow name="" value={entry.response.httpVersion} />
+          <TitleRow titleType="ResponseHeaders" title="Response Headers" />
           {
-            entry.response.headers.map((header, i) =>
+            responseHeaders.map((header, i) =>
               <ParamRow key={i} name={header.name} value={header.value} />
             )
           }
-          <TitleRow titleType="Request" title="Request Headers" />
+          <TitleRow titleType="RequestVersion" title="Request Version" />
+          <ParamRow name="" value={entry.request.httpVersion} />
+          <TitleRow titleType="RequestHeaders" title="Request Headers" />
           {
-            entry.request.headers.map((header, i) =>
+            requestHeaders.map((header, i) =>
               <ParamRow key={i} name={header.name} value={header.value} />
             )
           }
@@ -30,7 +37,7 @@ class Headers extends React.Component {
 }
 
 Headers.canShowEntry = function(entry) {
-  return (entry.response.headers.length > 0);
+  return true;
 };
 
 Headers.propTypes = {
