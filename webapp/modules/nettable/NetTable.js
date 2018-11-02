@@ -1,6 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
+
 import * as Date_ from "../core/date";
 import * as Str from "../core/string";
 import * as Dom from "../core/dom";
@@ -80,7 +80,7 @@ class NetModel {
       barConnectingWidth: ((connecting / phaseElapsed) * 100).toFixed(3),
       barSendingWidth: ((sending / phaseElapsed) * 100).toFixed(3),
       barWaitingWidth: ((waiting / phaseElapsed) * 100).toFixed(3),
-      barReceivingWidth: ((receiving / phaseElapsed) * 100).toFixed(3)
+      barReceivingWidth: ((receiving / phaseElapsed) * 100).toFixed(3),
     };
   }
 }
@@ -93,7 +93,7 @@ function getElapsedTime(file) {
 }
 
 function createBars(entry, fileTimes) {
-  let bars = [
+  const bars = [
     "Blocking",
     "Resolving",
     "Connecting",
@@ -122,29 +122,22 @@ function createPageTimingBars(pageTimings) {
   });
 }
 
-const NetTable = createReactClass({
-  displayName: "nettable/NetTable",
-
-  propTypes: {
-    entries: PropTypes.array,
-    model: PropTypes.object,
-    page: PropTypes.object,
-  },
-
-  getInitialState() {
+class NetTable extends Component {
+  constructor(props) {
+    super(props);
     const entries = this.getEntries();
-    return {
+    this.state = {
       netRowExpandedState: entries.map((page, i) => false),
     };
-  },
+  }
 
   componentDidMount() {
     this.context.infoTipHolder.addListener(this);
-  },
+  }
 
   componentWillUnmount() {
     this.context.infoTipHolder.removeListener(this);
-  },
+  }
 
   showInfoTip(infoTip, target, x, y, rangeParent, rangeOffset) {
     const { page } = this.props;
@@ -169,7 +162,7 @@ const NetTable = createReactClass({
         };
       }
     }
-  },
+  }
 
   getEntries() {
     if (this.props.page) {
@@ -178,13 +171,13 @@ const NetTable = createReactClass({
       return this.props.entries;
     }
     return [];
-  },
+  }
 
   onNetRowClick(netRowIdx) {
     setState(this, {
       netRowExpandedState: this.state.netRowExpandedState.map(booleanFlipper(netRowIdx)),
     });
-  },
+  }
 
   createNetRows(entries) {
     if (entries.length < 1) {
@@ -221,7 +214,7 @@ const NetTable = createReactClass({
 
       return [netRow, <NetInfoRow key={"NetInfoRow" + i} entry={entry} />];
     }));
-  },
+  }
 
   render() {
     const entries = this.getEntries();
@@ -245,8 +238,14 @@ const NetTable = createReactClass({
         </tbody>
       </table>
     );
-  },
-});
+  }
+}
+
+NetTable.propTypes = {
+  entries: PropTypes.array,
+  model: PropTypes.object,
+  page: PropTypes.object,
+};
 
 NetTable.contextTypes = {
   infoTipHolder: PropTypes.object,

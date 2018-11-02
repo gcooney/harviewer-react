@@ -1,14 +1,7 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
 
-const Bar = createReactClass({
-  displayName: "nettable/Bar",
-
-  propTypes: {
-    bar: PropTypes.object,
-  },
-
+class Bar extends Component {
   render() {
     const { bar } = this.props;
 
@@ -20,6 +13,10 @@ const Bar = createReactClass({
       </div>
     );
   }
-});
+}
+
+Bar.propTypes = {
+  bar: PropTypes.object,
+};
 
 export default Bar;

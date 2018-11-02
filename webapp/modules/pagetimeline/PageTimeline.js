@@ -1,18 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
+
 import PageTimelineCol from "./PageTimelineCol";
 import PageDescContainer from "./PageDescContainer";
 import PageTimelineTable from "./PageTimelineTable";
 
-export default createReactClass({
-  displayName: "pagetimeline/PageTimeline",
-
-  propTypes: {
-    model: PropTypes.object,
-    page: PropTypes.object,
-  },
-
+class PageTimeline extends Component {
   render() {
     const model = this.props.model;
     let page = this.props.page;
@@ -29,8 +22,8 @@ export default createReactClass({
     const pageDescContainer = page ? <PageDescContainer model={model} page={page} /> : null;
 
     return (
-      <div style={{ height: 'auto' }} className="pageTimelineBody   opened ">
-        <table style={{ margin: '7px' }} cellPadding="0" cellSpacing="0" className=" ">
+      <div style={{ height: "auto" }} className="pageTimelineBody   opened ">
+        <table style={{ margin: "7px" }} cellPadding="0" cellSpacing="0" className=" ">
           <tbody className=" ">
             <tr className=" ">
               <td className=" ">
@@ -46,14 +39,21 @@ export default createReactClass({
         </table>
       </div>
     );
-  },
+  }
 
   maxLoadTime(pages) {
     // Iterate over all pages and find the max load-time so, the vertical
     // graph extent can be set.
     return pages.reduce((max, page) => {
-      var onLoadTime = page.pageTimings.onLoad;
+      const onLoadTime = page.pageTimings.onLoad;
       return Math.max(onLoadTime, max);
     }, 0);
   }
-});
+}
+
+PageTimeline.propTypes = {
+  model: PropTypes.object,
+  page: PropTypes.object,
+};
+
+export default PageTimeline;

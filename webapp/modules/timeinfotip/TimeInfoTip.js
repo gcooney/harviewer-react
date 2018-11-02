@@ -1,6 +1,5 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
 
 import * as Date_ from "../core/date";
 import * as Str from "../core/string";
@@ -125,16 +124,7 @@ const defaultTimeInfoTipEventRowData = [
   },
 ];
 
-export default createReactClass({
-  displayName: "timeinfotip/TimeInfoTip",
-
-  propTypes: {
-    entry: PropTypes.object,
-    page: PropTypes.object,
-    timeInfoTipRowData: PropTypes.object,
-    timeInfoTipEventRowData: PropTypes.object,
-  },
-
+class TimeInfoTip extends Component {
   getTimeInfoTipRowData(timeInfoTipRowData) {
     if (!timeInfoTipRowData) {
       timeInfoTipRowData = defaultTimeInfoTipRowData.map((data) => {
@@ -144,7 +134,7 @@ export default createReactClass({
       });
     }
     return timeInfoTipRowData;
-  },
+  }
 
   getTimeInfoTipEventRowData(timeInfoTipEventRowData, page) {
     if (!timeInfoTipEventRowData) {
@@ -160,7 +150,7 @@ export default createReactClass({
     }
 
     return timeInfoTipEventRowData;
-  },
+  }
 
   render() {
     const { entry, page } = this.props;
@@ -199,5 +189,14 @@ export default createReactClass({
         </tbody>
       </table>
     );
-  },
-});
+  }
+}
+
+TimeInfoTip.propTypes = {
+  entry: PropTypes.object,
+  page: PropTypes.object,
+  timeInfoTipRowData: PropTypes.object,
+  timeInfoTipEventRowData: PropTypes.object,
+};
+
+export default TimeInfoTip;

@@ -1,55 +1,44 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
+
 import * as Url from "../core/url";
 import * as Str from "../core/string";
 import Bar from "./Bar";
 import PageTimingBar from "./PageTimingBar";
 
-const NetRow = createReactClass({
-  displayName: "nettable/NetRow",
-
-  propTypes: {
-    entry: PropTypes.object,
-    entryId: PropTypes.number,
-    opened: PropTypes.bool,
-    bars: PropTypes.array,
-    pageTimingBars: PropTypes.array,
-    onClick: PropTypes.func,
-  },
-
+class NetRow extends Component {
   getHref(entry) {
     const fileName = Url.getFileName(this.getFullHref(entry));
     return unescape(entry.request.method + " " + fileName);
-  },
+  }
 
   getFullHref(entry) {
     return unescape(entry.request.url);
-  },
+  }
 
   getStatus(entry) {
     const status = entry.response.status > 0 ? (entry.response.status + " ") : "";
     return status + entry.response.statusText;
-  },
+  }
 
   getType(entry) {
     return entry.response.content.mimeType;
-  },
+  }
 
   getDomain(entry) {
     return Url.getPrettyDomain(entry.request.url);
-  },
+  }
 
   getSize(entry) {
     const bodySize = entry.response.bodySize;
     const size = (bodySize && bodySize !== -1) ? bodySize : entry.response.content.size;
 
     return this.formatSize(size);
-  },
+  }
 
   formatSize(bytes) {
     return Str.formatSize(bytes);
-  },
+  }
 
   shouldComponentUpdate(nextProps, nextState) {
     const { entry, entryId, opened, bars, pageTimingBars } = this.props;
@@ -61,14 +50,14 @@ const NetRow = createReactClass({
       bars.length === nextProps.bars.length &&
       pageTimingBars.length === nextProps.pageTimingBars.length
     );
-  },
+  }
 
   render() {
     let { entry, entryId, opened, bars, pageTimingBars, onClick } = this.props;
 
     bars = (bars || []).map((bar, i) => <Bar key={"Entry" + entryId + "Bar" + i} bar={bar} />);
     pageTimingBars = (pageTimingBars || []).map((pageTimingBar, i) =>
-      <PageTimingBar key={"Entry" + entryId + "PageTimingBar" + i} { ...pageTimingBar } />
+      <PageTimingBar key={"Entry" + entryId + "PageTimingBar" + i} {...pageTimingBar} />
     );
 
     return (
@@ -103,7 +92,7 @@ const NetRow = createReactClass({
         </td>
         <td className="netTimeCol netCol ">
           <div className="netTimelineBar ">&nbsp;
-                        {bars}
+            {bars}
             {pageTimingBars}
           </div>
         </td>
@@ -112,7 +101,16 @@ const NetRow = createReactClass({
         </td>
       </tr>
     );
-  },
-});
+  }
+}
+
+NetRow.propTypes = {
+  entry: PropTypes.object,
+  entryId: PropTypes.number,
+  opened: PropTypes.bool,
+  bars: PropTypes.array,
+  pageTimingBars: PropTypes.array,
+  onClick: PropTypes.func,
+};
 
 export default NetRow;

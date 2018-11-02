@@ -1,23 +1,22 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
 
-export default createReactClass({
-  displayName: "nettable/PageTimingBar",
-
-  propTypes: {
-    classes: PropTypes.string,
-    left: PropTypes.string,
-  },
-
+class PageTimingBar extends Component {
   render() {
-    let { left, classes } = this.props;
+    const { left, classes } = this.props;
     const style = {
       left: left,
-      display: "block"
+      display: "block",
     };
     return (
       <div className={classes + " netPageTimingBar netBar"} style={style}></div>
     );
   }
-});
+}
+
+PageTimingBar.propTypes = {
+  classes: PropTypes.string,
+  left: PropTypes.string,
+};
+
+export default PageTimingBar;

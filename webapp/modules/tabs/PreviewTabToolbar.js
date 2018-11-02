@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Toolbar, { Button } from "../toolbar/Toolbar";
 
-export default class PreviewTabToolbar extends React.Component {
+class PreviewTabToolbar extends React.Component {
   render() {
     const { onStatsClick, onTimelineClick, onClearClick, onDownloadClick } = this.props;
 
@@ -32,3 +32,5 @@ PreviewTabToolbar.propTypes = {
   onClearClick: PropTypes.func,
   onDownloadClick: PropTypes.func,
 };
+
+export default PreviewTabToolbar;

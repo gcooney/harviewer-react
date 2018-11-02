@@ -7,7 +7,7 @@ import booleanFlipper from "../booleanFlipper";
 import PageRow from "./PageRow";
 import PageInfoRow from "./PageInfoRow";
 
-export default class PageTable extends React.Component {
+class PageTable extends React.Component {
   constructor(props) {
     super(props);
 
@@ -78,3 +78,5 @@ PageTable.displayName = "pagetable/PageTable";
 PageTable.propTypes = {
   model: PropTypes.object,
 };
+
+export default PageTable;

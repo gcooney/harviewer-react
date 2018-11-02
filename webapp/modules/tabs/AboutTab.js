@@ -1,23 +1,15 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
+
 import aboutHtml from "raw-loader!./aboutTab.html";
 
-export default createReactClass({
-  displayName: "tabs/AboutTab",
-
-  propTypes: {
-    version: PropTypes.string,
-    harSpecURL: PropTypes.string,
-    harViewerExampleApp: PropTypes.string,
-  },
-
+class AboutTab extends Component {
   replace(s, pattern, replaceWith) {
     if (!replaceWith) {
       return s;
     }
     return s.replace(new RegExp(pattern, "g"), replaceWith);
-  },
+  }
 
   render() {
     let { version, harSpecURL, harViewerExampleApp } = this.props;
@@ -33,5 +25,13 @@ export default createReactClass({
     return (
       <div className="aboutBody" dangerouslySetInnerHTML={{ __html: html }}></div>
     );
-  },
-});
+  }
+}
+
+AboutTab.propTypes = {
+  version: PropTypes.string,
+  harSpecURL: PropTypes.string,
+  harViewerExampleApp: PropTypes.string,
+};
+
+export default AboutTab;

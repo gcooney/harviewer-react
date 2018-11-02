@@ -1,14 +1,7 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
 
-export default createReactClass({
-  displayName: "pagetimeline/PageTimelineTable",
-
-  propTypes: {
-    pageTimelineCols: PropTypes.node,
-  },
-
+class PageTimelineTable extends Component {
   render() {
     return (
       <table cellPadding="0" cellSpacing="0" className="pageTimelineTable">
@@ -20,4 +13,10 @@ export default createReactClass({
       </table>
     );
   }
-});
+}
+
+PageTimelineTable.propTypes = {
+  pageTimelineCols: PropTypes.node,
+};
+
+export default PageTimelineTable;

@@ -1,21 +1,14 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
+
 import NetTable from "../nettable/NetTable";
 
-const PageInfoRow = createReactClass({
-  displayName: "pagetable/PageInfoRow",
-
-  propTypes: {
-    model: PropTypes.object,
-    page: PropTypes.object,
-  },
-
+class PageInfoRow extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const { model, page } = this.props;
     console.log(!(model === nextProps.model && page === nextProps.page));
     return !(model === nextProps.model && page === nextProps.page);
-  },
+  }
 
   render() {
     const { model, page } = this.props;
@@ -26,7 +19,12 @@ const PageInfoRow = createReactClass({
         </td>
       </tr>
     );
-  },
-});
+  }
+}
+
+PageInfoRow.propTypes = {
+  model: PropTypes.object,
+  page: PropTypes.object,
+};
 
 export default PageInfoRow;

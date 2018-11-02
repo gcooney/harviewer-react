@@ -1,21 +1,23 @@
-import React from "react";
-import createReactClass from "create-react-class";
+import React, { Component } from "react";
+
 import * as Lib from "../core/lib";
 
 export default function createPie(fields) {
-  return createReactClass(Object.assign({}, {
-    title: fields.title || "TITLE",
-
-    data: fields.data || [],
+  const clazz = class extends Component {
+    constructor(props) {
+      super(props);
+      this.title = fields.title || "TITLE";
+      this.data = fields.data || [];
+    }
 
     componentDidMount() {
       this.draw(this.refs.canvas, this);
-    },
+    }
 
     render() {
       const model = this.props.model;
 
-      let pages = model ? model.input.log.pages : null;
+      const pages = model ? model.input.log.pages : null;
 
       if (pages) {
         this.update(pages);
@@ -41,33 +43,31 @@ export default function createPie(fields) {
           </tbody>
         </table>
       );
-    },
+    }
 
     cleanUp() {
       for (let i = 0; i < this.data.length; i++) {
         this.data[i].value = 0;
         this.data[i].count = 0;
       }
-    },
+    }
 
     getLabelTooltipText(item) {
       return fields.getLabelTooltipText ? fields.getLabelTooltipText(item) : "DEFAULT";
-    },
+    }
 
     draw(canvas, pie) {
       if (!canvas || !canvas.getContext) {
         return;
       }
 
-      var ctx = canvas.getContext("2d");
-      var radius = Math.min(canvas.width, canvas.height) / 2;
-      var center = [canvas.width / 2, canvas.height / 2];
+      const ctx = canvas.getContext("2d");
+      const radius = Math.min(canvas.width, canvas.height) / 2;
+      const center = [canvas.width / 2, canvas.height / 2];
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      var sofar = 0; // keep track of progress
-
-      var data = pie.data;
-      var total = 0;
+      const data = pie.data;
+      let total = 0;
       for (let i = 0; i < data.length; i++) {
         total += data[i].value;
       }
@@ -83,8 +83,10 @@ export default function createPie(fields) {
         return;
       }
 
+      let sofar = 0; // keep track of progress
+
       for (let j = 0; j < data.length; j++) {
-        var thisvalue = data[j].value / total;
+        const thisvalue = data[j].value / total;
         if (thisvalue <= 0) {
           continue;
         }
@@ -104,35 +106,37 @@ export default function createPie(fields) {
 
         sofar += thisvalue; // increment progress tracker
       }
-    },
+    }
 
     update(pages) {
       this.cleanUp();
 
       // If there is no selection, display stats for all pages/files.
       if (!pages || !pages.length) {
-        this.handlePage(null);
+        fields.handlePage.call(this, null);
         return;
       }
 
       // Iterate over all selected pages
-      for (var j = 0; j < pages.length; j++) {
-        var page = pages[j];
-        this.handlePage(page);
+      for (let j = 0; j < pages.length; j++) {
+        const page = pages[j];
+        fields.handlePage.call(this, page);
       }
-    },
+    }
 
     showInfoTip(infoTip, target, x, y) {
-      var pieTable = Lib.getAncestorByClass(target, "pagePieTable");
+      const pieTable = Lib.getAncestorByClass(target, "pagePieTable");
       if (!pieTable) {
         return false;
       }
 
-      var label = Lib.getAncestorByClass(target, "pieLabel");
+      const label = Lib.getAncestorByClass(target, "pieLabel");
       if (label) {
         PieInfoTip.render(pieTable.repObject, label.repObject, infoTip);
         return true;
       }
     }
-  }, fields));
+  };
+  clazz.displayName = fields.title;
+  return clazz;
 }

@@ -1,39 +1,33 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import createReactClass from "create-react-class";
+
 import * as Lib from "../core/lib";
 
-export default createReactClass({
-  displayName: "pagetimeline/PageTimelineCol",
-
-  propTypes: {
-    maxElapsedTime: PropTypes.number,
-    page: PropTypes.object,
-  },
-
+class PageTimelineCol extends Component {
   render() {
-    let title = "Click to select and include in statistics preview.";
-    let style = {
-      height: this.getHeight() + 'px'
+    const title = "Click to select and include in statistics preview.";
+    const style = {
+      height: this.getHeight() + "px",
     };
     return (
       <td ref="dom" className="pageTimelineCol ">
         <div title={title} style={style} onClick={this.onClick} className="pageBar "></div>
       </td>
     );
-  },
+  }
 
   onClick(event) {
-    var e = Lib.fixEvent(event);
+    const e = Lib.fixEvent(event);
 
-    var bar = e.target;
-    if (!Lib.hasClass(bar, "pageBar"))
+    const bar = e.target;
+    if (!Lib.hasClass(bar, "pageBar")) {
       return;
+    }
 
-    var control = Lib.isControlClick(e);
-    var shift = Lib.isShiftClick(e);
+    const control = Lib.isControlClick(e);
+    const shift = Lib.isShiftClick(e);
 
-    var row = Lib.getAncestorByClass(bar, "pageTimelineRow");
+    const row = Lib.getAncestorByClass(bar, "pageTimelineRow");
 
     // If no modifier is active remove the current selection.
     if (!control && !shift) {
@@ -44,36 +38,44 @@ export default createReactClass({
     Selection.toggle(bar);
 
     this.selectionChanged();
-  },
+  }
 
-  selectionChanged: function() {
+  selectionChanged() {
     // Notify listeners such as the statistics preview
-    var pages = this.getSelection();
+    const pages = this.getSelection();
     Lib.dispatch(this.listeners, "onSelectionChange", [pages]);
-  },
+  }
 
-  isVisible: function() {
+  isVisible() {
     return Lib.hasClass(this.element, "opened");
-  },
+  }
 
-  getSelection: function() {
+  getSelection() {
     if (!this.isVisible()) {
       return [];
     }
 
-    var row = Lib.getElementByClass(this.refs.dom, "pageTimelineRow");
+    const row = Lib.getElementByClass(this.refs.dom, "pageTimelineRow");
     return Selection.getSelection(row);
-  },
+  }
 
-  getHeight: function() {
-    var height = 1;
-    var page = this.props.page;
-    var maxElapsedTime = this.props.maxElapsedTime;
-    var onLoad = page.pageTimings.onLoad;
+  getHeight() {
+    const page = this.props.page;
+    const maxElapsedTime = this.props.maxElapsedTime;
+    const onLoad = page.pageTimings.onLoad;
+
+    let height = 1;
     if (onLoad > 0 && maxElapsedTime > 0) {
       height = Math.round((onLoad / maxElapsedTime) * 100);
     }
 
     return Math.max(1, height);
   }
-});
+}
+
+PageTimelineCol.propTypes = {
+  maxElapsedTime: PropTypes.number,
+  page: PropTypes.object,
+};
+
+export default PageTimelineCol;
