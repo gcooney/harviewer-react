@@ -1,6 +1,6 @@
 /* This file comes from DOJO (adapted for requirejs): dojox/json/ref.js */
 
-define("preview/ref", [
+define([
     "../core/lib"
 ],
 
