@@ -1,7 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import Cookies from "../core/cookies";
 import AppContext from "../AppContext";
 import homeHtml from "raw-loader!./homeTab.html";
 
@@ -10,14 +9,32 @@ if (!Element.prototype.matches) {
   Element.prototype.matches = Element.prototype.msMatchesSelector;
 }
 
-function on(e, selector, listener, context) {
+function on(e, selector, listener) {
   const { target } = e;
   if (target.matches(selector)) {
-    listener.call(context || this, e);
+    listener.call(null, e);
   }
 }
 
-export class HomeTab extends React.Component {
+export class HomeTab extends Component {
+  constructor(props) {
+    super(props);
+    this.ref = React.createRef();
+  }
+
+  componentDidMount() {
+    this.validate = this.ref.current.querySelector("#validate");
+    this.validate.checked = this.context.validate;
+  }
+
+  componentWillUnmount() {
+    this.validate = null;
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    this.validate.checked = this.context.validate;
+  }
+
   onClick = (e) => {
     on(e, ".example", this.onExampleClick);
     on(e, ".linkAbout", this.onAboutClick);
@@ -48,12 +65,18 @@ export class HomeTab extends React.Component {
   onValidateClick = (e) => {
     e.stopPropagation();
     const checked = e.target.checked;
-    Cookies.setCookie("validate", checked);
+    const { setValidate } = this.context;
+    setValidate(checked);
   }
 
   render() {
     return (
-      <div className="homeBody" dangerouslySetInnerHTML={{ __html: homeHtml }} onClick={this.onClick}></div>
+      <div
+        className="homeBody"
+        ref={this.ref}
+        onClick={this.onClick}
+        dangerouslySetInnerHTML={{ __html: homeHtml }}
+      ></div>
     );
   }
 };
@@ -63,10 +86,6 @@ HomeTab.propTypes = {
   requestTabChange: PropTypes.func,
 };
 
-const WrappedHomeTab = (props) => (
-  <AppContext.Consumer>
-    {({ appendPreview }) => <HomeTab {...props} appendPreview={appendPreview} />}
-  </AppContext.Consumer>
-);
+HomeTab.contextType = AppContext;
 
-export default WrappedHomeTab;
+export default HomeTab;

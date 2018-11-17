@@ -1,34 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import setState from "../setState";
 import TabBar from "./TabBar";
 import TabBodies from "./TabBodies";
 
 class TabView extends React.Component {
   constructor(props) {
     super(props);
-
     this.tabBodies = React.createRef();
-
-    const { selectedTabIdx } = this.props;
-    this.state = {
-      selectedTabIdx: selectedTabIdx || 0,
-    };
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (typeof nextProps.selectedTabIdx === "number") {
-      setState(this, {
-        selectedTabIdx: nextProps.selectedTabIdx,
-      });
-    }
-  }
-
-  onSelectTab = (tab, tabIdx, tabs) => {
-    setState(this, {
-      selectedTabIdx: tabIdx,
-    });
+  onSelectTab = (tabIdx, tab, tabs) => {
+    const { onSelectedTabChange } = this.props;
+    onSelectedTabChange(tabIdx, tab, tabs);
   }
 
   getTab(name) {
@@ -36,13 +20,7 @@ class TabView extends React.Component {
   }
 
   render() {
-    const { id, tabs } = this.props;
-
-    // Try to get selectedTabIdx from state first.
-    let { selectedTabIdx } = this.state;
-    if (typeof selectedTabIdx !== "number") {
-      selectedTabIdx = this.props.selectedTabIdx;
-    }
+    const { id, tabs, selectedTabIdx } = this.props;
 
     return (
       <table cellPadding="0" cellSpacing="0" className={"tabView " + (id || "")}>
@@ -65,6 +43,7 @@ TabView.propTypes = {
   id: PropTypes.string,
   selectedTabIdx: PropTypes.number,
   tabs: PropTypes.array,
+  onSelectedTabChange: PropTypes.func,
 };
 
 export default TabView;

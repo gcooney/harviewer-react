@@ -1,4 +1,5 @@
-import React from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import Strings from "amdi18n-loader!../nls/requestBody";
 
@@ -68,8 +69,7 @@ const responseBodyComponents = {
   },
 };
 
-function createTabs(props) {
-  const { entry } = props;
+function createTabs(entry) {
   const tabs = [];
   Object.keys(responseBodyComponents).forEach((name) => {
     const Component = responseBodyComponents[name].Component;
@@ -83,15 +83,38 @@ function createTabs(props) {
   return tabs;
 }
 
-function NetInfoRow(props) {
-  const tabs = createTabs(props);
-  return (
-    <tr className="netInfoRow">
-      <td colSpan="9" className="netInfoCol">
-        <TabView id="requestBody" tabs={tabs} />
-      </td>
-    </tr>
-  );
+class NetInfoRow extends Component {
+  state = {
+    selectedTabIdx: 0,
+  }
+
+  setSelectedTab = (selectedTabIdx) => {
+    if (typeof selectedTabIdx === "string") {
+      selectedTabIdx = this.tabs.findIndex(({ id }) => id === selectedTabIdx);
+    }
+    this.setState({ selectedTabIdx });
+  }
+
+  render() {
+    const { entry } = this.props;
+    this.tabs = createTabs(entry);
+    return (
+      <tr className="netInfoRow">
+        <td colSpan="9" className="netInfoCol">
+          <TabView
+            id="requestBody"
+            tabs={this.tabs}
+            selectedTabIdx={this.state.selectedTabIdx}
+            onSelectedTabChange={this.setSelectedTab}
+          />
+        </td>
+      </tr>
+    );
+  }
+}
+
+NetInfoRow.propTypes = {
+  entry: PropTypes.object,
 };
 
 export default NetInfoRow;

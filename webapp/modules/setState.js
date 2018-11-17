@@ -1,5 +1,6 @@
 export default function setState(context, ...sources) {
-  const newState = Object.assign({}, context.state, ...sources);
-  context.setState(newState);
-  return newState;
+  context.setState((prevState) => {
+    const newState = Object.assign({}, context.state, ...sources);
+    return newState;
+  });
 }
