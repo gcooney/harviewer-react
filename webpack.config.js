@@ -14,7 +14,10 @@ const definePlugin = new webpack.DefinePlugin({
   },
 });
 
-function makeConfig(target = "") {
+function makeConfig({
+  target = "",
+  babelPresetEnvUseBuiltIns = false,
+}) {
   const babelPresetEnvTargets = (target === "legacy")
     ? {
       "ie": "11",
@@ -76,7 +79,7 @@ function makeConfig(target = "") {
             options: {
               presets: [
                 ["@babel/preset-env", {
-                  useBuiltIns: "entry",
+                  useBuiltIns: babelPresetEnvUseBuiltIns,
                   targets: babelPresetEnvTargets,
                   debug: true,
                 }],
@@ -118,7 +121,16 @@ function makeConfig(target = "") {
   };
 }
 
-module.exports = [
-  makeConfig(),
-  makeConfig("legacy"),
-];
+module.exports = (env, options) => {
+  const prod = options && options.mode === "production";
+  const babelPresetEnvUseBuiltIns = prod ? "entry" : false;
+  return [
+    makeConfig({
+      babelPresetEnvUseBuiltIns,
+    }),
+    makeConfig({
+      target: "legacy",
+      babelPresetEnvUseBuiltIns,
+    }),
+  ];
+};
