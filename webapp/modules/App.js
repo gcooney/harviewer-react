@@ -145,6 +145,14 @@ class App extends React.Component {
     }
   }
 
+  appendError = (err) => {
+    const { errors } = this.state;
+    setState(this, {
+      errors: errors.concat(err),
+      selectedTabIdx: PREVIEW_TAB_INDEX,
+    });
+  }
+
   componentDidMount() {
     const { container } = this.props;
     container.repObject = this;
@@ -153,9 +161,10 @@ class App extends React.Component {
 
     this.updatePreviewCols();
 
-    Loader.run((response) => {
-      this.appendPreview(response);
-    }, (err) => console.error(err));
+    Loader.run(this.appendPreview, (jqXHR, textStatus, errorThrown) => this.appendError({
+      property: jqXHR.statusText,
+      message: jqXHR.url,
+    }));
   }
 
   componentWillUnmount() {

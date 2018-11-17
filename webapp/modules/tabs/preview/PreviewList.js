@@ -58,7 +58,6 @@ class PreviewList extends React.Component {
         {
           (errors || []).map((error, i) => <ValidationError key={i} error={error} />)
         }
-
       </div>
     );
   }
