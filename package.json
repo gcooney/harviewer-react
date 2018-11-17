@@ -4,7 +4,7 @@
   "description": "HAR Viewer built using React",
   "main": "index.js",
   "scripts": {
-    "copy:core": "node bin/copy-core.js",
+    "copy:core": "node bin/copy-core.js ../../harviewer2/",
     "deploy-gh-pages": "node deploy/deploy.js",
     "lint": "eslint ./webapp",
     "start": "webpack-dev-server --disableHostCheck=true --inline --hot --compress --content-base ./",
