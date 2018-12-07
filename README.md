@@ -19,26 +19,6 @@ Using [npm](https://www.npmjs.com/), pull in the required packages with:
 
     npm install
 
-Until harviewer-react is stable, it will share some code from the original HAR
-Viewer.  We need to set this up in the `webpack.config.js` file:
-
-Change the following line:
-
-````js
-// Path to existing HAR Viewer. We can reuse some code from the following modules:
-//   "core", "nls", "preview", "tabs", "syntax-highlighter"
-// E.g.
-const pathToLegacyHarViewerScripts = path.join(__dirname, "../harviewer/webapp/scripts");
-// or
-const pathToLegacyHarViewerScripts = "/full/path/to/harviewer/webapp/scripts";
-````
-
-so that the path points to the `webapp/scripts` folder of your local HAR
-Viewer source code.
-
-Clone [the repo](https://github.com/janodvarko/harviewer) to get the source
-code.
-
 ## Start
 
 To start the [webpack-dev-server](https://webpack.github.io/docs/webpack-dev-server.html), use:
