@@ -53,7 +53,7 @@ class NetRow extends Component {
   }
 
   render() {
-    let { entry, entryId, opened, bars, pageTimingBars, onClick } = this.props;
+    let { entry, entryId, breakLayout, opened, bars, pageTimingBars, onClick } = this.props;
 
     bars = (bars || []).map((bar, i) => <Bar key={"Entry" + entryId + "Bar" + i} bar={bar} />);
     pageTimingBars = (pageTimingBars || []).map((pageTimingBar, i) =>
@@ -61,7 +61,7 @@ class NetRow extends Component {
     );
 
     return (
-      <tr className={"netRow loaded isExpandable" + (opened ? " opened" : "")} onClick={onClick} data-entry-id={entryId}>
+      <tr className={"netRow loaded isExpandable" + (opened ? " opened" : "")} onClick={onClick} data-entry-id={entryId} breaklayout={String(breakLayout)}>
         <td className="netHrefCol netCol ">
           <div style={{ marginLeft: "0px" }} className="netHrefLabel netLabel ">
             {this.getHref(entry)}

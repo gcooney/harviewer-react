@@ -189,31 +189,49 @@ class NetTable extends Component {
 
     const m = new NetModel();
     const phases = Phases.calculatePhases(model.input, page, defaultTimingDefinitions, null, null);
-    console.log(model, page, phases);
-    const phase = phases.phases[0];
 
-    const phaseStartTime = phase.startTime;
-    const phaseElapsed = phase.endTime - phase.startTime;
-    m.calculatePageTimings(page, phase, phaseElapsed);
+    let netRowIdx = 0;
+    let netInfoRowIdx = 0;
+    let firstEntryOfPhaseIdx = 0;
 
-    const pageTimingBars = createPageTimingBars(phase.pageTimings);
+    const netRows = phases.phases.reduce((rows, phase, phaseIdx) => {
+      const phaseStartTime = phase.startTime;
+      const phaseElapsed = phase.endTime - phase.startTime;
+      m.calculatePageTimings(page, phase, phaseElapsed);
 
-    // Use concat to flatten an array of arrays to a flat array.
-    return [].concat(entries.map((entry, i) => {
-      const opened = netRowExpandedState[i];
-      const fileTimes = m.calculateFileTimes(entry, phaseStartTime, phaseElapsed);
-      const bars = fileTimes ? createBars(entry, fileTimes) : null;
+      const pageTimingBars = createPageTimingBars(phase.pageTimings);
 
-      const netRow = <NetRow key={"NetRow" + i} page={page} phase={phase}
-        entry={entry} entryId={i} opened={opened} bars={bars}
-        pageTimingBars={pageTimingBars} onClick={this.onNetRowClick.bind(this, i)} />;
+      phase.files.forEach((entry, i) => {
+        const entryIdx = firstEntryOfPhaseIdx + i;
 
-      if (!opened) {
-        return netRow;
-      }
+        const opened = netRowExpandedState[i];
+        const fileTimes = m.calculateFileTimes(entry, phaseStartTime, phaseElapsed);
+        const bars = fileTimes ? createBars(entry, fileTimes) : null;
 
-      return [netRow, <NetInfoRow key={"NetInfoRow" + i} entry={entry} />];
-    }));
+        const firstFileInPhase = i === 0;
+        const firstPhase = phaseIdx === 0;
+        const breakLayout = firstFileInPhase && !firstPhase;
+        const netRow = <NetRow key={"NetRow" + (++netRowIdx)} page={page} phase={phase}
+          entry={entry} entryId={entryIdx} opened={opened} bars={bars}
+          pageTimingBars={pageTimingBars} onClick={this.onNetRowClick.bind(this, entryIdx)}
+          breakLayout={breakLayout}
+        />;
+
+        rows.push(netRow);
+
+        if (!opened) {
+          return rows;
+        }
+
+        rows.push(<NetInfoRow key={"NetInfoRow" + (++netInfoRowIdx)} entry={entry} />);
+      });
+
+      firstEntryOfPhaseIdx += phase.files.length;
+
+      return rows;
+    }, []);
+
+    return netRows;
   }
 
   render() {
