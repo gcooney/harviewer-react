@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import * as Events from "./core/events";
 import * as Url from "./core/url";
 import HarModel from "./preview/harModel";
 import Loader from "./preview/harModelLoader";
@@ -11,6 +10,7 @@ import harViewerStrings from "amdi18n-loader!./nls/harViewer";
 import previewTabStrings from "amdi18n-loader!./nls/previewTab";
 import domTabStrings from "amdi18n-loader!./nls/domTab";
 
+import deferred from "./deferred";
 import AppContext from "./AppContext";
 import setState from "./setState";
 import buildInfo from "./buildInfo";
@@ -31,6 +31,11 @@ class App extends React.Component {
 
     this.tabView = React.createRef();
 
+    this._onPreInitDeferred = deferred();
+    this.onPreInit = this._onPreInitDeferred.promise;
+    this._onInitDeferred = deferred();
+    this.onInit = this._onInitDeferred.promise;
+
     this.state = {
       harModels: [],
       errors: [],
@@ -43,8 +48,9 @@ class App extends React.Component {
   componentDidMount() {
     const { container } = this.props;
     container.repObject = this;
-    Events.fireEvent(container, "onViewerPreInit");
-    Events.fireEvent(container, "onViewerInit");
+
+    this._onPreInitDeferred.resolve(this);
+    this._onInitDeferred.resolve(this);
 
     this.updatePreviewCols();
 
@@ -197,9 +203,9 @@ class App extends React.Component {
     return (
       <InfoTipHolder>
         {
-          (mode === "preview") ?
-            <PreviewList harModels={harModels} errors={errors} /> :
-            <TabView
+          (mode === "preview")
+            ? <PreviewList harModels={harModels} errors={errors} />
+            : <TabView
               id="harView"
               ref={this.tabView}
               tabs={this.createTabs()}
