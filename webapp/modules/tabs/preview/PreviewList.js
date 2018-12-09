@@ -5,6 +5,8 @@ import ValidationError from "./ValidationError";
 import NetTable from "../../nettable/NetTable";
 import PageTable from "../../pagetable/PageTable";
 
+import AppContext from "../../AppContext";
+
 class PreviewList extends React.Component {
   findPagelessEntries(har) {
     const { pages, entries } = har.log;
@@ -38,12 +40,13 @@ class PreviewList extends React.Component {
 
   render() {
     const { harModels, errors } = this.props;
+    const { expandAll } = this.context;
 
     return (
       <div className="previewList">
         {
           harModels.map((model, i) => {
-            const pageTable = <PageTable key={"PageTable" + i} model={model} />;
+            const pageTable = <PageTable key={"PageTable" + i} model={model} expandAll={expandAll} />;
 
             // If there are pageless entries in the HAR, show them in a standalone NetTable
             const pagelessEntries = this.findPagelessEntries(model.input);
@@ -67,5 +70,7 @@ PreviewList.propTypes = {
   harModels: PropTypes.array,
   errors: PropTypes.array,
 };
+
+PreviewList.contextType = AppContext;
 
 export default PreviewList;

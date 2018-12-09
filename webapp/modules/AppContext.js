@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import Url from "./core/url";
 
 import Cookies from "./core/cookies";
 
@@ -17,8 +18,11 @@ export class AppContextProvider extends Component {
   state = DEFAULT_STATE;
 
   componentDidMount() {
+    const expandAll = Url.getURLParameter("expand", window.location.href) === "true";
+    const validate = Cookies.getCookie("validate") !== "false";
     this.setState({
-      validate: Cookies.getCookie("validate") !== "false",
+      validate,
+      expandAll,
     });
   }
 

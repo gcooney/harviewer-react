@@ -12,18 +12,22 @@ class PageTable extends React.Component {
     super(props);
 
     const { model } = this.props;
-    if (!model || !model.input) {
-      this.state = {};
-    } else {
-      const pages = model.input.log.pages || [];
-      const pageRowExpandedState = pages.map(() => false);
-      if (pageRowExpandedState.length === 1) {
-        pageRowExpandedState[0] = true;
-      }
-      this.state = {
-        pageRowExpandedState,
-      };
+
+    this.state = {};
+
+    if (model && model.input) {
+      this.state.pageRowExpandedState = this.getInitialExpandedState();
     }
+  }
+
+  getInitialExpandedState() {
+    const { model, expandAll } = this.props;
+    const pages = model.input.log.pages || [];
+    const pageRowExpandedState = pages.map(() => expandAll);
+    if (pageRowExpandedState.length === 1) {
+      pageRowExpandedState[0] = true;
+    }
+    return pageRowExpandedState;
   }
 
   createPageRows(model) {
@@ -77,6 +81,7 @@ PageTable.displayName = "pagetable/PageTable";
 
 PageTable.propTypes = {
   model: PropTypes.object,
+  expandAll: PropTypes.bool,
 };
 
 export default PageTable;
