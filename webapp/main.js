@@ -7,7 +7,6 @@ import { AppContextProvider } from "./modules/AppContext";
 const path = window.location.href.split("?")[0];
 const mode = (path.endsWith("preview.html")) ? "preview" : "";
 const container = document.getElementById("content");
-container.addEventListener("onViewerInit", (e) => console.log(e));
 render((
   <AppContextProvider>
     <App mode={mode} container={container} />
