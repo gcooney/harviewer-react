@@ -39,7 +39,6 @@ class App extends React.Component {
     this.state = {
       harModels: [],
       errors: [],
-      previewCols: "url status size timeline",
       selectedTabIdx: 0,
       appendPreview: this.appendPreview,
     };
@@ -51,8 +50,6 @@ class App extends React.Component {
 
     this._onPreInitDeferred.resolve(this);
     this._onInitDeferred.resolve(this);
-
-    this.updatePreviewCols();
 
     Loader.run(this.appendPreview, (jqXHR, textStatus, errorThrown) => this.appendError({
       property: jqXHR.statusText,
@@ -123,7 +120,11 @@ class App extends React.Component {
 
   updatePreviewCols() {
     const { container } = this.props;
-    container.setAttribute("previewCols", this.state.previewCols);
+    container.setAttribute("previewCols", (this.context.previewCols || []).join(" "));
+  }
+
+  setPreviewColumns(cols, avoidCookies) {
+    this.context.setPreviewCols(cols, avoidCookies);
   }
 
   loadHar(url, settings) {
@@ -145,6 +146,11 @@ class App extends React.Component {
     }, errorCallback, doneCallback);
   }
 
+  isPreviewMode() {
+    const { mode } = this.props;
+    return (mode === "preview");
+  }
+
   appendPreview = (harObjectOrString) => {
     // TODO - get validate from checkbox/cookie value
     const { harModels, errors } = this.state;
@@ -152,9 +158,7 @@ class App extends React.Component {
     // TODO - don't go poking in the URL. Get the loader to pass back whether we should validate based on URL.
     let { validate } = this.context;
 
-    const { mode } = this.props;
-    const isPreview = (mode === "preview");
-    if (isPreview) {
+    if (this.isPreviewMode()) {
       if (Url.getURLParameter("validate") === "false") {
         validate = false;
       }
@@ -198,12 +202,11 @@ class App extends React.Component {
 
   render() {
     const { selectedTabIdx, harModels, errors } = this.state;
-    const { mode } = this.props;
 
     return (
       <InfoTipHolder>
         {
-          (mode === "preview")
+          (this.isPreviewMode())
             ? <PreviewList harModels={harModels} errors={errors} />
             : <TabView
               id="harView"
