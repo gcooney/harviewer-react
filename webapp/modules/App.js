@@ -41,6 +41,7 @@ class App extends React.Component {
       selectedTabIdx: 0,
       appendPreview: this.appendPreview,
       tabs: ["Home", "Preview", "DOM", "About", "Schema"],
+      showTabBar: true,
     };
   }
 
@@ -209,8 +210,14 @@ class App extends React.Component {
     }));
   }
 
+  showTabBar(showTabBar) {
+    this.setState({
+      showTabBar,
+    });
+  }
+
   render() {
-    const { selectedTabIdx, harModels, errors } = this.state;
+    const { selectedTabIdx, harModels, errors, showTabBar } = this.state;
 
     return (
       <InfoTipHolder>
@@ -222,6 +229,7 @@ class App extends React.Component {
               ref={this.tabView}
               tabs={this.createTabs()}
               selectedTabIdx={selectedTabIdx}
+              showTabBar={showTabBar}
               onSelectedTabChange={this.setSelectedTab}
             />
         }

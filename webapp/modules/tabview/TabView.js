@@ -5,9 +5,10 @@ import TabBar from "./TabBar";
 import TabBodies from "./TabBodies";
 
 class TabView extends React.Component {
-  constructor(props) {
-    super(props);
-    this.tabBodies = React.createRef();
+  constructor(...args) {
+    super(...args);
+    this.tabBodiesRef = React.createRef();
+    this.tableRef = React.createRef();
   }
 
   onSelectTab = (tabIdx, tab, tabs) => {
@@ -16,20 +17,27 @@ class TabView extends React.Component {
   }
 
   getTab(name) {
-    return this.tabBodies.current.getTab(name);
+    return this.tabBodiesRef.current.getTab(name);
   }
 
   render() {
-    const { id, tabs, selectedTabIdx } = this.props;
+    const {
+      id,
+      tabs,
+      selectedTabIdx,
+      showTabBar = true,
+    } = this.props;
+
+    const hidetabbar = String(showTabBar === false);
 
     return (
-      <table cellPadding="0" cellSpacing="0" className={"tabView " + (id || "")}>
+      <table ref={this.tableRef} cellPadding="0" cellSpacing="0" className={"tabView " + (id || "")} hidetabbar={hidetabbar}>
         <tbody className="">
           <tr className="tabViewRow">
             <td style={{ verticalAlign: "top" }} className="tabViewCol">
               <div className="tabViewBody">
-                <TabBar id={id} tabs={tabs} selectedTabIdx={selectedTabIdx} onSelectTab={this.onSelectTab} />
-                <TabBodies ref={this.tabBodies} id={id} tabs={tabs} selectedTabIdx={selectedTabIdx} />
+                {showTabBar && <TabBar id={id} tabs={tabs} selectedTabIdx={selectedTabIdx} onSelectTab={this.onSelectTab} />}
+                <TabBodies ref={this.tabBodiesRef} id={id} tabs={tabs} selectedTabIdx={selectedTabIdx} />
               </div>
             </td>
           </tr>
@@ -44,6 +52,7 @@ TabView.propTypes = {
   selectedTabIdx: PropTypes.number,
   tabs: PropTypes.array,
   onSelectedTabChange: PropTypes.func,
+  showTabBar: PropTypes.bool,
 };
 
 export default TabView;
