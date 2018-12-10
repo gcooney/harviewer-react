@@ -12,7 +12,7 @@ class AboutTab extends Component {
   }
 
   render() {
-    let { version, harSpecURL, harViewerExampleApp } = this.props;
+    let { version, harSpecURL, harViewerDemoUrl } = this.props;
     if (!harSpecURL) {
       harSpecURL = "http://www.softwareishard.com/blog/har-12-spec/";
     }
@@ -20,7 +20,7 @@ class AboutTab extends Component {
     let html = aboutHtml;
     html = this.replace(html, "@VERSION@", version);
     html = this.replace(html, "@HAR_SPEC_URL@", harSpecURL);
-    html = this.replace(html, "@HARVIEWER_EXAMPLE_APP@", harViewerExampleApp);
+    html = this.replace(html, "@HARVIEWER_DEMO_URL@", harViewerDemoUrl);
 
     return (
       <div className="aboutBody" dangerouslySetInnerHTML={{ __html: html }}></div>
@@ -31,7 +31,7 @@ class AboutTab extends Component {
 AboutTab.propTypes = {
   version: PropTypes.string,
   harSpecURL: PropTypes.string,
-  harViewerExampleApp: PropTypes.string,
+  harViewerDemoUrl: PropTypes.string,
 };
 
 export default AboutTab;

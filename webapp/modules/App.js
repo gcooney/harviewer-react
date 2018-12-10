@@ -66,12 +66,12 @@ class App extends React.Component {
     this.updatePreviewCols();
   }
 
-  createAboutTab(harViewerExampleApp) {
+  createAboutTab(harViewerDemoUrl) {
     const versionStr = buildInfo.version + "/" + buildInfo.gitVersion;
     const aboutTab = {
       id: "About",
       label: harViewerStrings.aboutTabLabel,
-      body: <AboutTab version={versionStr} harViewerExampleApp={harViewerExampleApp} />,
+      body: <AboutTab version={versionStr} harViewerDemoUrl={harViewerDemoUrl} />,
     };
     aboutTab.content = (
       <div>{aboutTab.label || aboutTab.id}
@@ -84,9 +84,9 @@ class App extends React.Component {
   createTabs() {
     const { harModels, errors } = this.state;
 
-    let harViewerExampleApp = window.location.href.split("?")[0];
-    if (!harViewerExampleApp.endsWith("/")) {
-      harViewerExampleApp += "/";
+    let harViewerDemoUrl = window.location.href.split("?")[0];
+    if (!harViewerDemoUrl.endsWith("/")) {
+      harViewerDemoUrl += "/";
     }
 
     const tabs = [
@@ -105,7 +105,7 @@ class App extends React.Component {
         label: domTabStrings.domTabLabel,
         body: <DOMTab />,
       },
-      this.createAboutTab(harViewerExampleApp),
+      this.createAboutTab(harViewerDemoUrl),
       {
         id: "Schema",
         label: harViewerStrings.schemaTabLabel,
