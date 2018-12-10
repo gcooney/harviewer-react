@@ -219,6 +219,7 @@ class App extends React.Component {
 };
 
 App.propTypes = {
+  container: PropTypes.instanceOf(HTMLElement),
   mode: PropTypes.string,
 };
 
