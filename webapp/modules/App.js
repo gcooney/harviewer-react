@@ -12,7 +12,6 @@ import domTabStrings from "amdi18n-loader!./nls/domTab";
 
 import deferred from "./deferred";
 import AppContext from "./AppContext";
-import setState from "./setState";
 import buildInfo from "./buildInfo";
 import InfoTipHolder from "./InfoTipHolder";
 import TabView from "./tabview/TabView";
@@ -41,6 +40,7 @@ class App extends React.Component {
       errors: [],
       selectedTabIdx: 0,
       appendPreview: this.appendPreview,
+      tabs: ["Home", "Preview", "DOM", "About", "Schema"],
     };
   }
 
@@ -66,30 +66,33 @@ class App extends React.Component {
     this.updatePreviewCols();
   }
 
-  createAboutTab(harViewerDemoUrl) {
+  createAboutTab() {
     const versionStr = buildInfo.version + "/" + buildInfo.gitVersion;
-    const aboutTab = {
-      id: "About",
-      label: harViewerStrings.aboutTabLabel,
-      body: <AboutTab version={versionStr} harViewerDemoUrl={harViewerDemoUrl} />,
-    };
-    aboutTab.content = (
-      <div>{aboutTab.label || aboutTab.id}
-        <span className="version"> {versionStr}</span>
-      </div>
-    );
-    return aboutTab;
-  }
-
-  createTabs() {
-    const { harModels, errors } = this.state;
 
     let harViewerDemoUrl = window.location.href.split("?")[0];
     if (!harViewerDemoUrl.endsWith("/")) {
       harViewerDemoUrl += "/";
     }
 
-    const tabs = [
+    const aboutTab = {
+      id: "About",
+      label: harViewerStrings.aboutTabLabel,
+      body: <AboutTab version={versionStr} harViewerDemoUrl={harViewerDemoUrl} />,
+    };
+
+    aboutTab.content = (
+      <div>{aboutTab.label || aboutTab.id}
+        <span className="version"> {versionStr}</span>
+      </div>
+    );
+
+    return aboutTab;
+  }
+
+  createTabs() {
+    const { harModels, errors, tabs } = this.state;
+
+    const tabInfo = [
       {
         id: "Home",
         label: homeTabStrings.homeTabLabel,
@@ -105,7 +108,7 @@ class App extends React.Component {
         label: domTabStrings.domTabLabel,
         body: <DOMTab />,
       },
-      this.createAboutTab(harViewerDemoUrl),
+      this.createAboutTab(),
       {
         id: "Schema",
         label: harViewerStrings.schemaTabLabel,
@@ -113,9 +116,9 @@ class App extends React.Component {
       },
     ];
 
-    this.tabs = tabs;
+    this.tabs = tabInfo.filter((info) => tabs.includes(info.id));
 
-    return tabs;
+    return this.tabs;
   }
 
   updatePreviewCols() {
@@ -168,13 +171,13 @@ class App extends React.Component {
       const model = new HarModel();
       const har = HarModel.parse(harObjectOrString, validate);
       model.append(har);
-      setState(this, {
+      this.setState({
         harModels: harModels.concat([model]),
         selectedTabIdx: PREVIEW_TAB_INDEX,
       });
     } catch (err) {
       const { errors: newErrors } = err;
-      setState(this, {
+      this.setState({
         errors: errors.concat(newErrors),
         selectedTabIdx: PREVIEW_TAB_INDEX,
       });
@@ -183,7 +186,7 @@ class App extends React.Component {
 
   appendError = (err) => {
     const { errors } = this.state;
-    setState(this, {
+    this.setState({
       errors: errors.concat(err),
       selectedTabIdx: PREVIEW_TAB_INDEX,
     });
@@ -198,6 +201,12 @@ class App extends React.Component {
       selectedTabIdx = this.tabs.findIndex(({ id }) => id === selectedTabIdx);
     }
     this.setState({ selectedTabIdx });
+  }
+
+  removeTab(name) {
+    this.setState(({ tabs }) => ({
+      tabs: tabs.filter((n) => n !== name),
+    }));
   }
 
   render() {
