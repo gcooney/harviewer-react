@@ -11,18 +11,8 @@ class InfoTipHolder extends React.Component {
   maxHeight = 80;
   infoTipMargin = 10;
   infoTipWindowPadding = 25;
-
-  constructor(props) {
-    super(props);
-    this.holder = React.createRef();
-    this.infoTip = React.createRef();
-  }
-
-  getChildContext() {
-    return {
-      infoTipHolder: this,
-    };
-  }
+  holder = React.createRef();
+  infoTip = React.createRef();
 
   componentDidMount() {
     this.holder.current.addEventListener("mouseover", this.mousemove, false);
@@ -109,10 +99,6 @@ class InfoTipHolder extends React.Component {
 
 InfoTipHolder.propTypes = {
   children: PropTypes.node,
-};
-
-InfoTipHolder.childContextTypes = {
-  infoTipHolder: PropTypes.object,
 };
 
 export default InfoTipHolder;

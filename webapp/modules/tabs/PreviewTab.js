@@ -2,8 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { saveAs } from "file-saver";
 
+import AppContext from "../AppContext";
 import setState from "../setState";
 import Stats from "../Stats";
+
 import PageTimeline from "../pagetimeline/PageTimeline";
 import PreviewTabToolbar from "./PreviewTabToolbar";
 import PreviewList from "./preview/PreviewList";
@@ -27,6 +29,10 @@ class PreviewTab extends React.Component {
     setState(this, {
       timelineVisible: !this.state.timelineVisible,
     });
+  }
+
+  addPageTiming(timing) {
+    this.context.addPageTiming(timing);
   }
 
   onDownloadClick = (e) => {
@@ -124,5 +130,7 @@ PreviewTab.propTypes = {
   harModels: PropTypes.array,
   errors: PropTypes.array,
 };
+
+PreviewTab.contextType = AppContext;
 
 export default PreviewTab;

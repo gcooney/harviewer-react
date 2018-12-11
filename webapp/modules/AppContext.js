@@ -3,11 +3,14 @@ import PropTypes from "prop-types";
 import Url from "./core/url";
 
 import Cookies from "./core/cookies";
+import InfoTipHolder from "./InfoTipHolder";
+import defaultTimingDefinitions from "./nettable/defaultTimingDefinitions";
 
 const DEFAULT_STATE = {
   validate: true,
   expandAll: true,
   previewCols: [],
+  pageTimingDefinitions: defaultTimingDefinitions.slice(),
 };
 
 const AppContext = React.createContext(DEFAULT_STATE);
@@ -18,6 +21,7 @@ export const AppContextConsumer = AppContext.Consumer;
 
 export class AppContextProvider extends Component {
   state = DEFAULT_STATE;
+  infoTipHolderRef = React.createRef();
 
   getDefaultVisibleNetCols() {
     const cols = Cookies.getCookie("previewCols");
@@ -76,16 +80,30 @@ export class AppContextProvider extends Component {
     this.setState({ validate });
   }
 
+  getInfoTipHolder = () => {
+    return this.infoTipHolderRef.current;
+  }
+
+  addPageTiming = (timing) => {
+    this.setState(({ pageTimingDefinitions }) => ({
+      pageTimingDefinitions: [...pageTimingDefinitions, timing],
+    }));
+  }
+
   render() {
-    const { state, setValidate, setPreviewCols } = this;
+    const state = this.state;
     return (
-      <AppContext.Provider value={{
-        ...state,
-        setValidate,
-        setPreviewCols,
-      }}>
-        {this.props.children}
-      </AppContext.Provider>
+      <InfoTipHolder ref={this.infoTipHolderRef}>
+        <AppContext.Provider value={{
+          ...state,
+          setValidate: this.setValidate,
+          setPreviewCols: this.setPreviewCols,
+          getInfoTipHolder: this.getInfoTipHolder,
+          addPageTiming: this.addPageTiming,
+        }}>
+          {this.props.children}
+        </AppContext.Provider>
+      </InfoTipHolder>
     );
   }
 }

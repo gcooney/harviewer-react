@@ -8,13 +8,13 @@ import * as Css from "../core/css";
 
 import setState from "../setState";
 import booleanFlipper from "../booleanFlipper";
+import AppContext from "../AppContext";
+import TimeInfoTip from "../timeinfotip/TimeInfoTip";
 
 import NetRow from "./NetRow";
 import NetSummaryRow from "./NetSummaryRow";
 import NetInfoRow from "./NetInfoRow";
 import { Phases } from "./Phases";
-import defaultTimingDefinitions from "./defaultTimingDefinitions";
-import TimeInfoTip from "../timeinfotip/TimeInfoTip";
 
 class NetModel {
   calculatePageTimings(page, phase, phaseElapsed) {
@@ -132,11 +132,11 @@ class NetTable extends Component {
   }
 
   componentDidMount() {
-    this.context.infoTipHolder.addListener(this);
+    this.context.getInfoTipHolder().addListener(this);
   }
 
   componentWillUnmount() {
-    this.context.infoTipHolder.removeListener(this);
+    this.context.getInfoTipHolder().removeListener(this);
   }
 
   showInfoTip(infoTip, target, x, y, rangeParent, rangeOffset) {
@@ -157,6 +157,7 @@ class NetTable extends Component {
           element: <TimeInfoTip entry={this.getEntries()[entryId]} page={page} />,
         };
       } else if (Css.hasClass(target, "netSizeLabel")) {
+        // TODO - size tip?
         return {
           multiline: false,
         };
@@ -186,9 +187,10 @@ class NetTable extends Component {
 
     const { model, page } = this.props;
     const { netRowExpandedState } = this.state;
+    const { pageTimingDefinitions } = this.context;
 
     const m = new NetModel();
-    const phases = Phases.calculatePhases(model.input, page, defaultTimingDefinitions, null, null);
+    const phases = Phases.calculatePhases(model.input, page, pageTimingDefinitions, null, null);
 
     let netRowIdx = 0;
     let netInfoRowIdx = 0;
@@ -265,8 +267,6 @@ NetTable.propTypes = {
   page: PropTypes.object,
 };
 
-NetTable.contextTypes = {
-  infoTipHolder: PropTypes.object,
-};
+NetTable.contextType = AppContext;
 
 export default NetTable;

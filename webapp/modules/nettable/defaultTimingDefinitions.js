@@ -4,11 +4,11 @@ export default [
   {
     name: "onContentLoad",
     classes: "netContentLoadBar",
-    description: Strings.ContentLoad
+    description: Strings.ContentLoad,
   },
   {
     name: "onLoad",
     classes: "netWindowLoadBar",
-    description: Strings.WindowLoad
-  }
+    description: Strings.WindowLoad,
+  },
 ];

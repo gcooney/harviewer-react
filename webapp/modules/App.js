@@ -13,7 +13,6 @@ import domTabStrings from "amdi18n-loader!./nls/domTab";
 import deferred from "./deferred";
 import AppContext from "./AppContext";
 import buildInfo from "./buildInfo";
-import InfoTipHolder from "./InfoTipHolder";
 import TabView from "./tabview/TabView";
 import AboutTab from "./tabs/AboutTab";
 import HomeTab from "./tabs/HomeTab";
@@ -225,20 +224,16 @@ class App extends React.Component {
     const { selectedTabIdx, harModels, errors, showTabBar } = this.state;
 
     return (
-      <InfoTipHolder>
-        {
-          (this.isPreviewMode())
-            ? <PreviewList harModels={harModels} errors={errors} />
-            : <TabView
-              id="harView"
-              ref={this.tabView}
-              tabs={this.createTabs()}
-              selectedTabIdx={selectedTabIdx}
-              showTabBar={showTabBar}
-              onSelectedTabChange={this.setSelectedTab}
-            />
-        }
-      </InfoTipHolder>
+      this.isPreviewMode()
+        ? <PreviewList harModels={harModels} errors={errors} />
+        : <TabView
+          id="harView"
+          ref={this.tabView}
+          tabs={this.createTabs()}
+          selectedTabIdx={selectedTabIdx}
+          showTabBar={showTabBar}
+          onSelectedTabChange={this.setSelectedTab}
+        />
     );
   }
 };
