@@ -49,13 +49,18 @@ class App extends React.Component {
     const { container } = this.props;
     container.repObject = this;
 
-    this._onPreInitDeferred.resolve(this);
-    this._onInitDeferred.resolve(this);
-
-    Loader.run(this.appendPreview, (jqXHR, textStatus, errorThrown) => this.appendError({
-      property: jqXHR.statusText,
-      message: jqXHR.url,
-    }));
+    Loader.run(
+      this.appendPreview,
+      (jqXHR, textStatus, errorThrown) => this.appendError({
+        property: jqXHR.statusText,
+        message: jqXHR.url,
+      }),
+      () => {
+        // resolve the Init promises when/if HARs are loaded.
+        this._onPreInitDeferred.resolve(this);
+        this._onInitDeferred.resolve(this);
+      },
+    );
   }
 
   componentWillUnmount() {

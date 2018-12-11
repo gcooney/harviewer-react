@@ -94,14 +94,14 @@ var Loader =
     /**
      * Uses the parameters provided in `window.location.href` to load HAR and or HARP files.
      */
-    run: function(callback, errorCallback)
+    run: function(callback, errorCallback, doneCallback)
     {
         var loadOptions = this.getLoadOptions(window.location.href);
 
         // New params
         if (loadOptions.hars.length > 0 || loadOptions.harps.length > 0) {
             return this.loadArchives(loadOptions.hars, loadOptions.harps,
-                loadOptions.callbackName, callback, errorCallback);
+                loadOptions.callbackName, callback, errorCallback, doneCallback);
         }
 
         // Legacy params
@@ -109,7 +109,7 @@ var Loader =
         if (hasBaseUrlOrInputUrls && loadOptions.urls.length > 0) {
             // The assumption here is that we load as HARP (JSONP).
             return this.loadArchives([], loadOptions.urls,
-                loadOptions.callbackName, callback, errorCallback);
+                loadOptions.callbackName, callback, errorCallback, doneCallback);
         }
 
         // Legacy params
@@ -118,8 +118,10 @@ var Loader =
         if (loadOptions.filePath) {
             // The assumption here is that we load as HAR (XHR).
             return this.loadArchives([loadOptions.filePath], [],
-                loadOptions.callbackName, callback, errorCallback);
+                loadOptions.callbackName, callback, errorCallback, doneCallback);
         }
+
+        setTimeout(doneCallback, 1);
     },
 
     /**
