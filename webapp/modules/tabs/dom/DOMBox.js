@@ -5,6 +5,9 @@ import ObjectTree from "../../tree/ObjectTree";
 class DOMBox extends React.Component {
   render() {
     const { harModels } = this.props;
+    if (!harModels) {
+      return null;
+    }
     const har = harModels[0].input;
     return (
       <table cellPadding="0" cellSpacing="0" className="domBox">
