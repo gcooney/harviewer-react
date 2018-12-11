@@ -111,7 +111,7 @@ class App extends React.Component {
       {
         id: "DOM",
         label: domTabStrings.domTabLabel,
-        body: <DOMTab />,
+        body: <DOMTab harModels={harModels} />,
       },
       this.createAboutTab(),
       {

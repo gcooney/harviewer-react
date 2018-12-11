@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import DOMBox from "./DOMBox";
-import AppContext from "../../AppContext";
 import Toolbar from "../../toolbar/Toolbar";
 
 class SearchBox extends React.Component {
@@ -44,12 +43,7 @@ class DOMTab extends React.Component {
 DOMTab.propTypes = {
   appendPreview: PropTypes.func,
   requestTabChange: PropTypes.func,
+  harModels: PropTypes.array,
 };
 
-const WrappedDOMTab = (props) => (
-  <AppContext.Consumer>
-    {({ harModels }) => <DOMTab {...props} harModels={harModels} />}
-  </AppContext.Consumer>
-);
-
-export default WrappedDOMTab;
+export default DOMTab;
