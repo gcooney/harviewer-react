@@ -18,6 +18,7 @@ const patternsToCopy = [
   "core/**",
   "nls/**",
   "tabs/*.html",
+  "tabs/ObjectSearch.js",
   "preview/**",
 ];
 
