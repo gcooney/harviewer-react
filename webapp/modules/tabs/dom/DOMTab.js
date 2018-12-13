@@ -1,75 +1,73 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import DOMBox from "./DOMBox";
+import Dom from "../../core/dom";
 import Toolbar from "../../toolbar/Toolbar";
 import ObjectSearch from "../../tabs/ObjectSearch";
 
+import DOMBox from "./DOMBox";
+import SearchBox from "./SearchBox";
+
 const caseSensitiveCookieName = "searchCaseSensitive";
 
-class SearchBox extends React.Component {
-  state = {
-    searchValue: "",
-    status: null,
+class DOMTab extends Component {
+  constructor(...args) {
+    super(...args);
+
+    this.domBoxRefs = this.props.harModels.map(() => React.createRef());
+    this.searchRef = React.createRef();
   }
 
-  onChange = (e) => {
-    const text = e.target.value;
-    this.setState({
-      searchValue: text,
-    }, () => this.search(text));
-  }
+  async selectText(search) {
+    const key = search.stack
+      .slice(1)
+      .reduce((key, stackItem, i, stack) => {
+        let propIndex = stackItem.propIndex;
+        if (i < stack.length - 1) {
+          // all indexes except the last are off-by-one when it comes to generating the key.
+          propIndex -= 1;
+        }
+        return key ? key + "." + propIndex : String(propIndex);
+      }, "");
 
-  onKeyPress = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      this.search(e.target.value);
+
+    // The root of search data is the list of inputs.
+    const { propIndex } = search.stack[0];
+
+    const domBoxRef = this.domBoxRefs[propIndex - 1];
+
+    // wait for the nodes to be shown before trying to select text
+    await domBoxRef.current.getTree().showNode(key);
+
+    const objectBox = domBoxRef.current.getTree().findObjectBox(key);
+    if (objectBox) {
+      const textNode = objectBox.firstChild;
+      search.selectText(textNode);
+      Dom.scrollIntoCenterView(objectBox);
     }
   }
 
-  search(text) {
-    const result = this.props.search(text);
-    this.setState({
-      status: result ? null : "notfound",
-    });
-  }
-
-  render() {
-    const { status } = this.state;
-    return (
-      <span className="searchBox">
-        <span className="toolbarSeparator resizer">&nbsp;</span>
-        <span className="searchTextBox">
-          <input type="text" placeholder="Search" className="searchInput" status={status} value={this.state.searchValue} onChange={this.onChange} onKeyPress={this.onKeyPress} />
-          <span className="arrow">&nbsp;</span>
-        </span>
-      </span>
-    );
-  }
-}
-
-class DOMTab extends Component {
   search = (text) => {
     if (text.length < 3) {
       return true;
     }
 
     if (this.currentSearch && this.currentSearch.text !== text) {
-      console.log("new text, clear search");
       this.currentSearch = null;
     }
 
     if (!this.currentSearch) {
-      console.log("create search");
       const { harModels } = this.props;
-      const inputs = harModels;
+      const inputs = harModels.map(({ input }) => input);
       this.currentSearch = new ObjectSearch(text, inputs, false, caseSensitiveCookieName);
     }
 
     if (this.currentSearch.findNext(text)) {
-      console.log(this.currentSearch);
+      this.selectText(this.currentSearch);
       return true;
     }
+
+    this.currentSearch = null;
 
     return false;
   }
@@ -86,7 +84,7 @@ class DOMTab extends Component {
     return (
       <div key="Toolbar" className="domToolbar">
         <Toolbar>
-          <SearchBox search={this.search} />
+          <SearchBox ref={this.searchRef} search={this.search} />
         </Toolbar>
       </div>
     );
@@ -101,7 +99,7 @@ class DOMTab extends Component {
           {
             harModels.map((model, i) => {
               const title = this.getTitle(model.input);
-              return <DOMBox key={`DOMBox${i}`} har={model.input} title={title} />;
+              return <DOMBox ref={this.domBoxRefs[i]} key={`DOMBox${i}`} har={model.input} title={title} />;
             })
           }
         </div>

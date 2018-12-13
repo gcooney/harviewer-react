@@ -4,6 +4,12 @@ import PropTypes from "prop-types";
 import ObjectTree from "../../tree/ObjectTree";
 
 class DOMBox extends Component {
+  objectTreeRef = React.createRef();
+
+  getTree() {
+    return this.objectTreeRef.current.getTree();
+  }
+
   render() {
     const { har, title } = this.props;
     if (!har) {
@@ -16,7 +22,7 @@ class DOMBox extends Component {
           <tr className="">
             <td className="content">
               <div className="title">{title}</div>
-              <ObjectTree root={har} />
+              <ObjectTree ref={this.objectTreeRef} root={har} />
             </td>
             <td className="splitter"></td>
             <td className="results">

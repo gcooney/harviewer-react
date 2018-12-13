@@ -1,10 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+import Css from "../core/css";
+import Dom from "../core/dom";
+import Events from "../core/events";
+
 import Representations from "./TreeRepresentations";
-import * as Css from "../core/css";
-import * as Dom from "../core/dom";
-import * as Events from "../core/events";
 
 export function createUINode(type, name, value, hasChildren, level) {
   const representation = Representations.getRep(value);
@@ -23,13 +24,35 @@ export function createUINode(type, name, value, hasChildren, level) {
   };
 };
 
-class Tree extends React.Component {
+function Row({ dataKey, level, child, hasChildrenClass }) {
+  const openClass = child.open ? "opened" : "";
+  return (
+    <tr data-key={dataKey} level={level} className={`memberRow ${child.type}Row ${hasChildrenClass} ${openClass}`}>
+      <td style={{ paddingLeft: `${child.indent}px` }} className="memberLabelCell">
+        <span className={`memberLabel ${child.type}Label`}>{child.name}</span></td>
+      <td className="memberValueCell"><child.representation type={child.type} value={child.value} /></td>
+    </tr>
+  );
+}
+
+function setStateAsync(ctx, updaterOrState, callback) {
+  return new Promise((resolve, reject) => {
+    ctx.setState(updaterOrState, () => {
+      (typeof callback === "function") && callback();
+      resolve();
+    });
+  });
+}
+
+class Tree extends Component {
   constructor(props) {
     super(props);
 
-    const { root } = this.props;
-    const uiTree = this.getUITree("ROOT", root);
+    this.tableRef = React.createRef();
 
+    const { root } = this.props;
+
+    const uiTree = this.getUITree("ROOT", root);
     this.state = {
       uiTree,
     };
@@ -51,25 +74,78 @@ class Tree extends React.Component {
     return uiNode;
   }
 
-  toggleNode(key) {
+  findObjectBox(key) {
+    const row = this.tableRef.current.querySelector(`[data-key="${key}"]`);
+    return row ? row.querySelector(".memberValueCell .objectBox") : null;
+  }
+
+  async findNode(key) {
+    const { populateChildren } = this.props;
     const { uiTree } = this.state;
 
+    let newUiTree = null;
+
     const parts = key.split(".");
-    const uiNode = parts.reduce((uiNode, part) => {
-      const { children } = uiNode;
-      return children[part];
+    const found = parts.reduce((uiNode, part) => {
+      const { hasChildren } = uiNode;
+      if (hasChildren && uiNode.children === null) {
+        populateChildren(uiNode, uiNode.level + 1);
+        uiNode.open = true;
+        newUiTree = uiTree;
+      }
+      const child = uiNode.children[part];
+      return child;
     }, uiTree);
 
-    if (!uiNode.open) {
-      const { populateChildren } = this.props;
-      populateChildren(uiNode, uiNode.level + 1);
-      uiNode.open = true;
-    } else {
-      uiNode.children = [];
-      uiNode.open = false;
+    if (newUiTree) {
+      return setStateAsync(this, { uiTree: newUiTree })
+        .then(() => found);
     }
 
-    this.setState(Object.assign({}, uiTree));
+    return found;
+  }
+
+  async resolveNode(keyOrNode) {
+    if (typeof keyOrNode === "string") {
+      return this.findNode(keyOrNode);
+    }
+    // assume it's a node already
+    return keyOrNode;
+  }
+
+  async refresh() {
+    // TODO - we fake a change of state here really.
+    // we've modified the actual state, but passed a new state 'wrapper' to setState to get re-render.
+    return setStateAsync(this, ({ uiTree }) => ({
+      uiTree,
+    }));
+  }
+
+  async showNode(keyOrNode) {
+    const { populateChildren } = this.props;
+    const uiNode = await this.resolveNode(keyOrNode);
+    const { hasChildren } = uiNode;
+    if (hasChildren) {
+      populateChildren(uiNode, uiNode.level + 1);
+    }
+    uiNode.open = true;
+    return this.refresh();
+  }
+
+  async hideNode(keyOrNode) {
+    const uiNode = await this.resolveNode(keyOrNode);
+    uiNode.children = null;
+    uiNode.open = false;
+    return this.refresh();
+  }
+
+  async toggleNode(keyOrNode) {
+    const uiNode = await this.resolveNode(keyOrNode);
+
+    if (!uiNode.open) {
+      return this.showNode(uiNode);
+    }
+    return this.hideNode(uiNode);
   }
 
   onClick = (e) => {
@@ -100,18 +176,12 @@ class Tree extends React.Component {
     (uiNode.children || []).forEach((child, i) => {
       const { level } = child;
       const hasChildrenClass = hasChildren(child.value) ? "hasChildren" : "";
-      const openClass = child.open ? "opened" : "";
+
       const key = makeKey(i);
       // console.log(key);
-      const row = (
-        <tr key={key} data-key={key} level={level} className={`memberRow ${child.type}Row ${hasChildrenClass} ${openClass}`}>
-          <td style={{ paddingLeft: `${child.indent}px` }} className="memberLabelCell">
-            <span className={`memberLabel ${child.type}Label`}>{child.name}</span></td>
-          <td className="memberValueCell"><child.representation type={child.type} value={child.value} /></td>
-        </tr>
-      );
-      rows.push(row);
-      if (hasChildren && child.open) {
+
+      rows.push(<Row key={key} dataKey={key} level={level} child={child} hasChildrenClass={hasChildrenClass} />);
+      if (hasChildrenClass && child.open) {
         this.renderRows(child, key, rows);
       }
     });
@@ -120,8 +190,11 @@ class Tree extends React.Component {
 
   render() {
     const { uiTree } = this.state;
+    if (!uiTree) {
+      return null;
+    }
     return (
-      <table cellPadding="0" cellSpacing="0" className="domTable" onClick={this.onClick}>
+      <table ref={this.tableRef} cellPadding="0" cellSpacing="0" className="domTable" onClick={this.onClick}>
         <tbody>
           {this.renderRows(uiTree)}
         </tbody>

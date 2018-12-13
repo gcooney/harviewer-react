@@ -32,9 +32,15 @@ export function populateChildren(uiNode, level) {
 }
 
 class ObjectTree extends React.Component {
+  treeRef = React.createRef();
+
+  getTree() {
+    return this.treeRef.current;
+  }
+
   render() {
     const { root } = this.props;
-    return <Tree root={root} hasChildren={hasChildren} populateChildren={populateChildren} />;
+    return <Tree ref={this.treeRef} root={root} hasChildren={hasChildren} populateChildren={populateChildren} />;
   }
 };
 
