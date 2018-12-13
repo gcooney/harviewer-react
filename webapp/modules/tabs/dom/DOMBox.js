@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import ObjectTree from "../../tree/ObjectTree";
 
-class DOMBox extends React.Component {
+class DOMBox extends Component {
   render() {
     const { har, title } = this.props;
     if (!har) {
@@ -27,5 +28,10 @@ class DOMBox extends React.Component {
     );
   }
 }
+
+DOMBox.propTypes = {
+  har: PropTypes.object,
+  title: PropTypes.string,
+};
 
 export default DOMBox;
