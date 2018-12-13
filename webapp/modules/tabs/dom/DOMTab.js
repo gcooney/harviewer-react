@@ -33,10 +33,14 @@ class DOMTab extends React.Component {
 
   render() {
     const { harModels } = this.props;
-    return [
-      this.renderToolbar(),
-      <DOMBox key="DOMBox" harModels={harModels} />,
-    ];
+    return (
+      <>
+        {this.renderToolbar()}
+        <div className="domContent">
+          <DOMBox key="DOMBox" ref={this.domBoxRef} harModels={harModels} />
+        </div>
+      </>
+    );
   }
 }
 
