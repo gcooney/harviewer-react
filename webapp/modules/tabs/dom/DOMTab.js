@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import DOMBox from "./DOMBox";
@@ -18,8 +18,16 @@ class SearchBox extends React.Component {
   }
 }
 
-class DOMTab extends React.Component {
+class DOMTab extends Component {
   onClick = (e) => { }
+
+  getTitle(har) {
+    // Iterate all pages and get titles.
+    // Some IE11 HARs (11.48.17134.0/11.0.65) don't have pages
+    return (har.log.pages || [])
+      .map(({ title }) => title)
+      .join(", ");
+  }
 
   renderToolbar() {
     return (
@@ -37,7 +45,12 @@ class DOMTab extends React.Component {
       <>
         {this.renderToolbar()}
         <div className="domContent">
-          <DOMBox key="DOMBox" ref={this.domBoxRef} harModels={harModels} />
+          {
+            harModels.map((model, i) => {
+              const title = this.getTitle(model.input);
+              return <DOMBox key={`DOMBox${i}`} har={model.input} title={title} />;
+            })
+          }
         </div>
       </>
     );

@@ -4,17 +4,17 @@ import ObjectTree from "../../tree/ObjectTree";
 
 class DOMBox extends React.Component {
   render() {
-    const { harModels } = this.props;
-    if (!harModels) {
+    const { har, title } = this.props;
+    if (!har) {
       return null;
     }
-    const har = harModels[0].input;
+
     return (
       <table cellPadding="0" cellSpacing="0" className="domBox">
         <tbody className="">
           <tr className="">
             <td className="content">
-              <div className="title">XML</div>
+              <div className="title">{title}</div>
               <ObjectTree root={har} />
             </td>
             <td className="splitter"></td>
