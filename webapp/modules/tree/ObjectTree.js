@@ -3,36 +3,31 @@ import PropTypes from "prop-types";
 
 import Tree, { createUINode } from "./Tree";
 
-function hasProperties(ob) {
-  if (typeof ob === "string") {
+export function hasChildren(value) {
+  if (typeof value === "string") {
+    // Object.keys(string) returns numeric keys like an array.
+    // We don't want that.
     return false;
   }
-  try {
-    // eslint-disable-next-line no-unused-vars
-    // eslint-disable-next-line guard-for-in
-    for (let name in ob) {
-      return true;
-    }
-  } catch (e) {
-  }
-  return false;
-}
-
-export function hasChildren(value) {
-  return hasProperties(value) && (typeof value === "object");
+  // arrays have keys, so this works for arrays and objects
+  return Object.keys(value).length > 0;
 }
 
 export function populateChildren(uiNode, level) {
   const object = uiNode.value;
   const children = uiNode.children = [];
-  for (let p in object) {
-    if (object.hasOwnProperty(p)) {
-      const propObj = object[p];
-      if (typeof propObj !== "function") {
-        const child = createUINode("dom", p, propObj, hasChildren(propObj), level);
-        children.push(child);
-      }
+
+  const handleChild = (prop, propObj) => {
+    if (typeof propObj !== "function") {
+      const child = createUINode("dom", prop, propObj, hasChildren(propObj), level);
+      children.push(child);
     }
+  };
+
+  if (Array.isArray(object)) {
+    object.forEach((item, i) => handleChild(i, item));
+  } else {
+    Object.keys(object).forEach((key) => handleChild(key, object[key]));
   }
 }
 
