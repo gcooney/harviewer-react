@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { saveAs } from "file-saver";
 
@@ -10,9 +10,12 @@ import PageTimeline from "../pagetimeline/PageTimeline";
 import PreviewTabToolbar from "./PreviewTabToolbar";
 import PreviewList from "./preview/PreviewList";
 
-class PreviewTab extends React.Component {
+class PreviewTab extends Component {
   constructor(props) {
     super(props);
+
+    this.toolbarRef = React.createRef();
+
     this.state = {
       timelineVisible: false,
       statsVisible: false,
@@ -92,6 +95,10 @@ class PreviewTab extends React.Component {
     return null;
   }
 
+  getToolbar() {
+    return this.toolbarRef.current;
+  }
+
   render() {
     const { harModels, errors } = this.props;
 
@@ -112,7 +119,7 @@ class PreviewTab extends React.Component {
     return (
       <div>
         <div className="previewToolbar">
-          <PreviewTabToolbar {...clickHandlers} />
+          <PreviewTabToolbar ref={this.toolbarRef} {...clickHandlers} />
         </div>
         <div className="previewTimeline">
           {this.state.timelineVisible ? <PageTimeline model={model} page={page} /> : ""}
