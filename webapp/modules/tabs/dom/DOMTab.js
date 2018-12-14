@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+import "../../json-query/JSONQuery";
+
 import Dom from "../../core/dom";
+import Cookies from "../../core/cookies";
+import Trace from "../../core/trace";
 import Toolbar from "../../toolbar/Toolbar";
 import ObjectSearch from "../../tabs/ObjectSearch";
 
@@ -16,6 +20,10 @@ class DOMTab extends Component {
 
     this.domBoxRefs = this.props.harModels.map(() => React.createRef());
     this.searchRef = React.createRef();
+
+    this.state = {
+      jsonQueryResults: null,
+    };
   }
 
   async selectText(search) {
@@ -48,6 +56,10 @@ class DOMTab extends Component {
   }
 
   search = (text) => {
+    if (this.isJSONQueryMode()) {
+      return this.jsonQuery(text);
+    }
+
     if (text.length < 3) {
       return true;
     }
@@ -72,6 +84,24 @@ class DOMTab extends Component {
     return false;
   }
 
+  jsonQuery(expr) {
+    const { harModels } = this.props;
+
+    const jsonQueryResults = harModels.map(({ input, i }) => {
+      try {
+        return JSONQuery(expr, input);
+      } catch (err) {
+        Trace.exception(err);
+      }
+    });
+
+    this.setState({
+      jsonQueryResults,
+    });
+
+    return true;
+  }
+
   getTitle(har) {
     // Iterate all pages and get titles.
     // Some IE11 HARs (11.48.17134.0/11.0.65) don't have pages
@@ -80,11 +110,16 @@ class DOMTab extends Component {
       .join(", ");
   }
 
+  isJSONQueryMode() {
+    return (Cookies.getCookie("searchJsonQuery") === "true");
+  }
+
   renderToolbar() {
+    const placeholder = this.isJSONQueryMode() ? "JSON Query" : "Search";
     return (
       <div key="Toolbar" className="domToolbar">
         <Toolbar>
-          <SearchBox ref={this.searchRef} search={this.search} />
+          <SearchBox ref={this.searchRef} search={this.search} placeholder={placeholder} />
         </Toolbar>
       </div>
     );
@@ -92,6 +127,7 @@ class DOMTab extends Component {
 
   render() {
     const { harModels } = this.props;
+    const { jsonQueryResults } = this.state;
     return (
       <>
         {this.renderToolbar()}
@@ -99,7 +135,14 @@ class DOMTab extends Component {
           {
             harModels.map((model, i) => {
               const title = this.getTitle(model.input);
-              return <DOMBox ref={this.domBoxRefs[i]} key={`DOMBox${i}`} har={model.input} title={title} />;
+              return <DOMBox
+                ref={this.domBoxRefs[i]}
+                key={`DOMBox${i}`}
+                har={model.input}
+                title={title}
+                jsonQueryMode={this.isJSONQueryMode()}
+                jsonQueryResults={jsonQueryResults && jsonQueryResults[i]}
+              />;
             })
           }
         </div>

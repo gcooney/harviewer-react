@@ -30,13 +30,14 @@ class SearchBox extends Component {
 
   render() {
     const { status } = this.state;
+    const { placeholder = "Search" } = this.props;
     return (
       <span className="searchBox">
         <span className="toolbarSeparator resizer">&nbsp;</span>
         <span className="searchTextBox">
           <input
             type="text"
-            placeholder="Search"
+            placeholder={placeholder}
             className="searchInput"
             status={status}
             value={this.state.searchValue}
@@ -52,6 +53,7 @@ class SearchBox extends Component {
 
 SearchBox.propTypes = {
   search: PropTypes.func,
+  placeholder: PropTypes.string,
 };
 
 export default SearchBox;

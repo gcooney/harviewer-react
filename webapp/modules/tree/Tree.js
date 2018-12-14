@@ -45,6 +45,10 @@ function setStateAsync(ctx, updaterOrState, callback) {
 }
 
 class Tree extends Component {
+  static defaultProps = {
+    showFirstChild: true,
+  };
+
   constructor(props) {
     super(props);
 
@@ -59,7 +63,10 @@ class Tree extends Component {
   }
 
   componentDidMount() {
-    this.toggleNode("0");
+    const { showFirstChild } = this.props;
+    if (showFirstChild) {
+      this.toggleNode("0");
+    }
   }
 
   getUITree(name, object, level) {
@@ -190,9 +197,11 @@ class Tree extends Component {
 
   render() {
     const { uiTree } = this.state;
+
     if (!uiTree) {
       return null;
     }
+
     return (
       <table ref={this.tableRef} cellPadding="0" cellSpacing="0" className="domTable" onClick={this.onClick}>
         <tbody>
@@ -204,9 +213,13 @@ class Tree extends Component {
 };
 
 Tree.propTypes = {
-  root: PropTypes.object,
+  root: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]),
   hasChildren: PropTypes.func,
   populateChildren: PropTypes.func,
+  showFirstChild: PropTypes.bool,
 };
 
 export default Tree;

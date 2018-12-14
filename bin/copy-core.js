@@ -20,6 +20,7 @@ const patternsToCopy = [
   "tabs/*.html",
   "tabs/ObjectSearch.js",
   "preview/**",
+  "json-query/JSONQuery.js",
 ];
 
 const webappDir = path.resolve(__dirname, "../webapp");

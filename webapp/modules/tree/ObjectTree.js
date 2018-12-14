@@ -39,13 +39,8 @@ class ObjectTree extends React.Component {
   }
 
   render() {
-    const { root } = this.props;
-    return <Tree ref={this.treeRef} root={root} hasChildren={hasChildren} populateChildren={populateChildren} />;
+    return <Tree ref={this.treeRef} hasChildren={hasChildren} populateChildren={populateChildren} {...this.props} />;
   }
-};
-
-ObjectTree.propTypes = {
-  root: PropTypes.object,
 };
 
 export default ObjectTree;
