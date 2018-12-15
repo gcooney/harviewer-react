@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+
 import Toolbar, { Button } from "../toolbar/Toolbar";
 
 class PreviewTabToolbar extends Component {
@@ -30,7 +31,7 @@ class PreviewTabToolbar extends Component {
       display: "inline-block",
       width: "16px",
       height: "16px",
-      background: "url(./css/images/download-sprites.png) no-repeat"
+      background: "url(./css/images/download-sprites.png) no-repeat",
     };
 
     const buttons = {
