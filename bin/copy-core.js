@@ -9,36 +9,51 @@ const glob = require("glob");
 const args = process.argv.slice(2);
 const hvDir = args[0] || "../harviewer/";
 
-const hvScriptsDir = path.resolve(hvDir, "webapp", "scripts");
-if (!fs.pathExistsSync(hvScriptsDir)) {
-  throw new Error(`HAR Viewer core "scripts" path ${hvScriptsDir} does not exist`);
-}
+const copyConfig = {
+  scripts: {
+    from: path.resolve(hvDir, "webapp", "scripts"),
+    to: path.resolve(__dirname, "../webapp", "modules"),
+    patterns: [
+      "core/**",
+      "nls/**",
+      "tabs/*.html",
+      "tabs/ObjectSearch.js",
+      "preview/**",
+      "json-query/JSONQuery.js",
+    ],
+  },
+  css: {
+    from: path.resolve(hvDir, "webapp", "css"),
+    to: path.resolve(__dirname, "../webapp", "css"),
+    patterns: [
+      "*.css",
+    ],
+  },
+};
 
-const patternsToCopy = [
-  "core/**",
-  "nls/**",
-  "tabs/*.html",
-  "tabs/ObjectSearch.js",
-  "preview/**",
-  "json-query/JSONQuery.js",
-];
+Object.keys(copyConfig).forEach((configKey) => {
+  console.log(`Copying files for "${configKey}"`);
+  const config = copyConfig[configKey];
 
-const webappDir = path.resolve(__dirname, "../webapp");
-if (!fs.pathExistsSync(webappDir)) {
-  throw new Error(`Destination webapp path ${webappDir} does not exist`);
-}
+  if (!fs.pathExistsSync(config.from)) {
+    throw new Error(`from path "${config.from}" does not exist`);
+  }
+  if (!fs.pathExistsSync(config.to)) {
+    throw new Error(`to path "${config.to}" does not exist`);
+  }
 
-patternsToCopy.forEach((pattern) => {
-  const files = glob.sync(pattern, {
-    cwd: hvScriptsDir,
-  });
-  files.forEach((file) => {
-    const src = path.resolve(hvScriptsDir, file);
-    const dest = path.resolve(webappDir, "modules", file);
-    if (fs.statSync(src).isFile()) {
-      mkdirp.sync(path.dirname(dest));
-      fs.copySync(src, dest);
-      console.log(`Copied ${src} to ${dest}`);
-    }
+  config.patterns.forEach((pattern) => {
+    const files = glob.sync(pattern, {
+      cwd: config.from,
+    });
+    files.forEach((file) => {
+      const src = path.resolve(config.from, file);
+      const dest = path.resolve(config.to, file);
+      if (fs.statSync(src).isFile()) {
+        mkdirp.sync(path.dirname(dest));
+        fs.copySync(src, dest);
+        console.log(`Copied ${src} to ${dest}`);
+      }
+    });
   });
 });
