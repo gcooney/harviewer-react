@@ -1,10 +1,10 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import * as Mime from "../core/mime";
 
+import * as Mime from "../core/mime";
 import { canDecode } from "./decoder";
 
-class Highlighted extends React.Component {
+class Highlighted extends Component {
   constructor(props) {
     super(props);
     this.domRef = React.createRef();
@@ -13,6 +13,7 @@ class Highlighted extends React.Component {
   maybeDoHighlighting() {
     const { entry } = this.props;
     const text = entry.response.content.text;
+    const brush = Highlighted.shouldHighlightAs(entry.response.content.mimeType);
 
     const pre = this.domRef.current;
     const code = pre.firstChild;
@@ -22,13 +23,17 @@ class Highlighted extends React.Component {
 
     code.innerText = "";
     code.appendChild(document.createTextNode(text));
-    // Run highlightElement on the <code>, not the <pre>
-    Prism.highlightElement(code);
 
-    // set flag that is useful for testing - to determine if highlighting has worked.
-    const brush = Highlighted.shouldHighlightAs(entry.response.content.mimeType);
-    if (code.classList.contains(`language-${brush}`)) {
-      code.setAttribute("highlighted", true);
+    if (brush) {
+      code.className = brush;
+      // Run highlightElement on the <code>, not the <pre>
+      hljs.highlightBlock(code);
+
+      // test that highlighting has worked, and set a flag that helps with testing.
+      const highlightedElement = code;
+      if (code.classList.contains("hljs")) {
+        highlightedElement.setAttribute("highlighted", true);
+      }
     }
   }
 
@@ -41,13 +46,10 @@ class Highlighted extends React.Component {
   }
 
   render() {
-    const { entry } = this.props;
-    const brush = Highlighted.shouldHighlightAs(entry.response.content.mimeType);
-    // line-numbers class must come after language.
-    // Prism needs a <code> block inside a <pre> block.
+    // highlightjs needs a <code> block inside a <pre> block.
     return (
       <div className="netInfoHighlightedText netInfoText">
-        <pre className={`language-${brush} line-numbers`} name="code" ref={this.domRef}>
+        <pre className="javascript" ref={this.domRef}>
           <code></code>
         </pre>
       </div>
@@ -104,9 +106,9 @@ Highlighted.shouldHighlightAs = function(mimeType) {
       "application/json",
     ],
     css: ["text/css"],
-    markup: ["text/html", "application/xhtml+xml"],
+    html: ["text/html", "application/xhtml+xml"],
   };
-  for (let brush in mimeTypesToHighlight) {
+  for (const brush in mimeTypesToHighlight) {
     if (mimeTypesToHighlight[brush].indexOf(mimeType) > -1) {
       return brush;
     }
