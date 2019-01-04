@@ -11,7 +11,7 @@ define([
     "./harSchema",
     "../core/cookies",
     "../core/trace",
-    "amdi18n-loader!../nls/harModel",
+    "i18n!../nls/harModel",
 ],
 
 function(Lib, JSONSchema, Ref, HarSchema, Cookies, Trace, Strings) {

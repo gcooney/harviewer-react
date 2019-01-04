@@ -15,8 +15,11 @@
 @import url("requestList.css");
 @import url("requestBody.css");
 
+/* @import url("previewMenu.css"); -- preview mode only */
+
 @import url("harStats.css");
 @import url("pageTimeline.css");
+
 @import url("validationError.css");
 
 /* Application Tabs */
@@ -27,8 +30,7 @@
 @import url("previewTab.css");
 @import url("search.css");
 
-/* Syntax Highlighter */
-@import url("SyntaxHighlighter.css");
+/* highlight.js */
+@import url("highlightjs/tomorrow.min.css");
 
 @import url("dragdrop.css");
-

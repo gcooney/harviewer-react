@@ -19,7 +19,7 @@
 }
 
 .netInfoRequestURL {
-  padding: 8px;
+    padding: 8px;
 }
 
 .netInfoText[selected="true"] {
