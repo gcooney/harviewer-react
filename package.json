@@ -9,8 +9,8 @@
     "lint": "eslint ./webapp",
     "start": "webpack-dev-server --disableHostCheck=true --inline --hot --compress --content-base ./",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack  --mode=development",
-    "build:prod": "webpack  --mode=production"
+    "build": "webpack --mode=development",
+    "build:prod": "webpack --mode=production"
   },
   "author": {
     "name": "gitgrimbo",
