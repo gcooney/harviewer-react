@@ -5,10 +5,10 @@ import * as Url from "./core/url";
 import HarModel from "./preview/harModel";
 import Loader from "./preview/harModelLoader";
 
-import homeTabStrings from "amdi18n-loader!./nls/homeTab";
-import harViewerStrings from "amdi18n-loader!./nls/harViewer";
-import previewTabStrings from "amdi18n-loader!./nls/previewTab";
-import domTabStrings from "amdi18n-loader!./nls/domTab";
+import homeTabStrings from "i18n!./nls/homeTab";
+import harViewerStrings from "i18n!./nls/harViewer";
+import previewTabStrings from "i18n!./nls/previewTab";
+import domTabStrings from "i18n!./nls/domTab";
 
 import deferred from "./deferred";
 import AppContext from "./AppContext";

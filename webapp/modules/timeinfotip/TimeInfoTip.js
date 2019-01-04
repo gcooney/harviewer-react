@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import * as Date_ from "../core/date";
 import * as Str from "../core/string";
-import Strings from "amdi18n-loader!../nls/requestList";
+import Strings from "i18n!../nls/requestList";
 
 function formatTime(time) {
   return Str.formatTime(time.toFixed(2));

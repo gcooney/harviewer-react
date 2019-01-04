@@ -1,6 +1,6 @@
 import createPie from "./Pie";
 import * as Str from "../core/string";
-import Strings from "amdi18n-loader!../nls/harStats";
+import Strings from "i18n!../nls/harStats";
 
 export default createPie({
   title: "Comparison of downloaded data from the server and browser cache.",

@@ -118,6 +118,11 @@ function makeConfig({
         "/selenium": "http://harviewer.lan:49001",
       },
     },
+    resolveLoader: {
+      alias: {
+        "i18n": "amdi18n-loader",
+      },
+    },
   };
 }
 

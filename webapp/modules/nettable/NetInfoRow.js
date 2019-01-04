@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import Strings from "amdi18n-loader!../nls/requestBody";
+import Strings from "i18n!../nls/requestBody";
 
 import TabView from "../tabview/TabView";
 import Headers from "../requestbodies/Headers";

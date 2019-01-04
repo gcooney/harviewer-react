@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import Strings from "amdi18n-loader!../nls/requestList";
+import Strings from "i18n!../nls/requestList";
 import * as Str from "../core/string";
 import { calculateSummaryInfo } from "./NetSummaryRowModel";
 

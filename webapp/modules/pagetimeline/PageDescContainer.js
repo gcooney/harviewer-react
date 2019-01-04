@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import * as Lib from "../core/lib";
 import * as HarModel from "../preview/harModel";
-import Strings from "amdi18n-loader!../nls/PageTimeline";
+import Strings from "i18n!../nls/PageTimeline";
 
 class PageDescContainer extends Component {
   render() {
