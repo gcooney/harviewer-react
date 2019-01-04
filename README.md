@@ -1,5 +1,17 @@
 # harviewer-react
 
+<b>
+
+WARNING - harviewer-react is under development. Until a 1.0.0 release, branches can and will be rebased (I will experiment with things and remove things).
+
+As this repo currently only has a single contributor (me) this isn't a problem.
+
+If you would like to start contributing, then I will choose a less destructive approach.
+
+</b>
+
+---
+
 harviewer-react is [HAR Viewer](https://github.com/janodvarko/harviewer)
 implemented in [React](https://facebook.github.io/react/)!
 
