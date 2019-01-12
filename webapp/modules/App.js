@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import * as Url from "./core/url";
+import * as Events from "./core/events";
 import HarModel from "./preview/harModel";
 import Loader from "./preview/harModelLoader";
 
@@ -47,6 +48,10 @@ class App extends React.Component {
   componentDidMount() {
     const { container } = this.props;
     container.repObject = this;
+
+    content.addEventListener("dragenter", (e) => Events.cancelEvent(e));
+    content.addEventListener("dragover", (e) => Events.cancelEvent(e));
+    content.addEventListener("drop", this.onDrop);
 
     Loader.run(
       this.appendPreview,
@@ -135,6 +140,74 @@ class App extends React.Component {
     this.context.setPreviewCols(cols, avoidCookies);
   }
 
+  handleDrop(dataTransfer) {
+    function notSupported(reason) {
+      alert("File drag and drop not supported for this browser [" + reason + "]");
+    }
+
+    if (!dataTransfer) {
+      return false;
+    }
+
+    const files = dataTransfer.files;
+    if (!files) {
+      return notSupported("dataTransfer.files not present");
+    }
+
+    const filesArr = [].slice.call(files);
+    const harFiles = filesArr.filter((file) => {
+      const ext = Url.getFileExtension(file.name);
+      return (ext.toLowerCase() === "har");
+    });
+
+    harFiles.sort((f1, f2) => f1.name.localeCompare(f2.name));
+
+    const self = this;
+
+    function readFile(file) {
+      if (typeof FileReader !== "undefined") {
+        return new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReader.onloadend = () => resolve(fileReader.result);
+          fileReader.readAsText(file);
+        });
+      }
+      return null;
+    }
+
+    // This function appends the previews one by one.
+    // The advantage of this (rather than trying to load all files
+    // concurrently) is if you drag-n-drop several large HAR files,
+    // you get visual feedback of the files loaded in the correct order.
+    async function appendPreviews(files, idx) {
+      idx = idx || 0;
+      if (idx >= files.length) {
+        return;
+      }
+      const promise = readFile(files[idx]);
+      if (!promise) {
+        return notSupported("FileReader API not present");
+      }
+
+      const text = await promise;
+      if (text) {
+        self.appendPreview(text);
+      }
+      appendPreviews(files, idx + 1);
+    }
+
+    appendPreviews(harFiles);
+  }
+
+  onDrop = (e) => {
+    Events.cancelEvent(e);
+    try {
+      this.handleDrop(e.dataTransfer);
+    } catch (err) {
+      console.error("HomeTab.onDrop EXCEPTION", err);
+    }
+  }
+
   loadHar(url, settings) {
     settings = settings || {};
     return Loader.load(this, url,
@@ -145,10 +218,11 @@ class App extends React.Component {
   }
 
   loadArchives(hars, harps, callbackName, callback, errorCallback, doneCallback) {
-    const self = this;
+    const app = this;
     return Loader.loadArchives(hars, harps, callbackName, function(jsonString, ...rest) {
-      self.appendPreview(jsonString);
+      app.appendPreview(jsonString);
       if (callback) {
+        // eslint-disable-next-line babel/no-invalid-this
         callback.apply(this, jsonString, ...rest);
       }
     }, errorCallback, doneCallback);
